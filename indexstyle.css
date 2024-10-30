@@ -1,0 +1,185 @@
+* {
+    font-family: stevie-sans, sans-serif;
+    font-style: normal;
+    font-weight: 100;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+/*Navigation*/
+.navigation {
+    overflow: hidden;
+    background-color: #FFFFFF;
+    margin-right: 10px;
+}
+
+.navigation a {
+    float: right;
+    color: #000000;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.navigation a:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+.navigation a:active {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+
+/* Section 1: Intro */
+h1 {
+    text-decoration: overline;
+}
+
+
+
+.title {
+    display: block;
+}
+
+.headerimg {
+    display: block;
+    width: auto;
+}
+
+p, h2 {
+    width: 80%
+}
+
+ul {
+    margin-top: -1%;
+}
+
+.intro {
+    font-size: 2em;
+    margin-top: 1em;
+}
+
+.ALquote {
+    text-align: center;
+}
+
+span {
+    font-size: 3em;
+    font-style: oblique;
+    font-weight: bolder;}
+
+span b {
+    font-size: 50%;
+    font-style: oblique;
+    font-weight: lighter;}
+
+.desc {
+    margin-top: .2em;
+    font-size: 1em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+.hcal {
+    font-style: oblique;
+}
+
+/* Section 2: Schedule, hours, address -- tables */
+/* options: use <aside> for address */
+* {
+  box-sizing: border-box;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+th {
+    font-weight: bold;
+    font-size: 1em;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table caption {
+    text-align: left;
+    font-size: 2em;
+    margin-bottom: .2em;
+}
+
+
+/* italicise code for 'moderated by Makeda
+span a {
+    font-size: 30%;
+    font-style: oblique;
+    margin-top: -100px;
+}
+*/
+
+.table1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+    padding: 20px;
+}
+
+.hours {
+    border-collapse: collapse;
+    width: 45%;
+    text-align: left;
+}
+
+.map {
+    width: 45%;
+    height: auto;
+    object-fit: cover;
+    margin-left: 100px;
+}
+
+.map h3 {
+    font-size: 2em;
+    margin-bottom: auto;
+}
+
+.table1 h5 {
+    font-style: oblique;
+    margin-top: auto;
+}
+
+.calendar {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3em;
+}
+
+.exhibition, p {
+    width: 90%;
+    margin: left;
+}
+
+/* Section 3: Acknowledgements */
+.thanks, h2, ul {
+    width: 70%;
+    text-align: center;
+}
+
+.thanks ul {
+    font-size: 1.2em;
+    columns:2;
+}
