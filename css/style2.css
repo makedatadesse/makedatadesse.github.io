@@ -1,0 +1,159 @@
+/* ============================================================
+   STYLE2.CSS — RBrain Design System
+   Separate stylesheet for the RBrain page and any future
+   pages that share its cyanotype / dark aesthetic.
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  /* Dark backgrounds */
+  --bg-dark:        #080808;
+  --bg-panel:       rgba(6, 14, 40, 0.72);
+  --bg-content:     #F4F1EC;   /* matches main site for revealed content */
+
+  /* Prussian blue / cyanotype palette */
+  --cyan-deep:      rgba(4, 18, 60, 0.45);
+  --cyan-mid:       rgba(100, 160, 255, 0.06);
+  --cyan-text:      rgba(180, 200, 255, 0.35);
+  --cyan-text-dim:  rgba(160, 180, 220, 0.3);
+  --cyan-border:    #b4c8ff2e;
+  --cyan-input-bg:  rgba(255, 255, 255, 0.04);
+
+  /* Spotlight */
+  --spotlight:      radial-gradient(
+                      ellipse 38% 42% at 50% 50%,
+                      rgba(210, 225, 255, 0.13) 0%,
+                      rgba(150, 185, 255, 0.06) 35%,
+                      transparent 70%
+                    );
+  --vignette:       radial-gradient(
+                      ellipse 80% 80% at 50% 50%,
+                      transparent 30%,
+                      rgba(0,0,0,0.55) 70%,
+                      rgba(0,0,0,0.9) 100%
+                    );
+
+  /* Shared ink colors (for revealed content matching main site) */
+  --ink:            #1C1917;
+  --ink-mid:        #6B6560;
+  --ink-light:      #A8A39D;
+  --ink-xlight:     #D4CCB8;
+
+  /* Accent — same red as main site for continuity */
+  --accent:         #C0392B;
+  --accent-dark:    #3a5bff;
+
+  /* Grid paper (for revealed content) */
+  --grid-color:     rgba(180, 168, 148, 0.18);
+  --grid-size:      28px;
+
+  /* Typography */
+  --font-bold:   'Boldonse', system-ui;
+  --font-mono:    'Boldonse', 'Monsieur La Doulaise', cursive;
+  --font-under:    'Boldonse', 'Mea Culpa', cursive;
+
+  /* Layout */
+  --nav-height:     60px;
+  --page-pad-x:     2.5rem;
+  --max-width:      1200px;
+}
+
+/* ── BASE ───────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg-dark);
+  color: var(--ink);
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ── NAVIGATION (for revealed content) ─────────────────────── */
+.site-nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--page-pad-x);
+  height: var(--nav-height);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.site-nav.scrolled {
+  background: rgba(244, 241, 236, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-xlight);
+}
+
+.nav-logo {
+  height: auto;
+  width: 10px;
+  display: block;
+  transition: opacity 0.2s;
+}
+.nav-logo:hover { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  transition: color 0.2s;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--accent); }
+
+/* ── TAG ────────────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  border: 1px solid var(--ink-xlight);
+  padding: 0.2rem 0.55rem;
+  transition: color 0.25s, border-color 0.25s;
+}
+
+/* ── REVEAL ANIMATION ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── DIVIDER ────────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--ink-xlight);
+  margin: 2.5rem 0;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --page-pad-x: 1.25rem; }
+  .nav-links { gap: 1.2rem; }
+  .nav-links a { font-size: 0.62rem; }
+}

@@ -1,0 +1,241 @@
+/* ============================================================
+   MAKEDA Y. TADESSE — STYLES.CSS
+   Global design system, shared styles, CSS variables
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:            #f6f6f5;
+  --ink:           #1C1917;
+  --ink-deep:      rgb(49, 42, 38);;
+  --ink-mid:       #6B6560;
+  --ink-light:     #A8A39D;
+  --ink-xlight:    #D4CCB8;
+  --accent:        #C0392B;
+  --accent-dark:   #96291F;
+  --accent-2:      #2C5F7A;
+  --accent-3:      #55af31;
+
+  --grid-color:    rgba(180, 168, 148, 0.18);
+  --grid-size:     28px;
+
+  --font-bold:    'Boldonse', system-ui;
+  --font-mono:     'Inconsolata', 'Courier New', monospace;
+  --font-serif:     'Boldonse', system-ui;
+
+  --nav-height:    60px;
+  --page-pad-x:    2.5rem;
+  --max-width:     1200px;
+}
+
+/* ── BASE ───────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ── NAVIGATION ─────────────────────────────────────────────── */
+.site-nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--page-pad-x);
+  height: var(--nav-height);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.site-nav.scrolled {
+  background: rgba(244, 241, 236, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-xlight);
+}
+
+.nav-logo {
+  height: auto;
+  width: 30px;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  transition: color 0.2s;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--accent); }
+
+/* ── EYEBROW ────────────────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+}
+
+/* ── PAGE WRAPPER (inner pages) ─────────────────────────────── */
+.page-wrapper {
+  padding-top: calc(var(--nav-height) + 3rem);
+  padding-left: var(--page-pad-x);
+  padding-right: var(--page-pad-x);
+  padding-bottom: 6rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* ── PAGE TITLE ─────────────────────────────────────────────── */
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 1.0;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.page-title em { font-style: italic; color: var(--accent); }
+
+/* ── DIVIDER ────────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--ink-xlight);
+  margin: 2.5rem 0;
+}
+
+/* ── TAGS ───────────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  border: 1px solid var(--ink-xlight);
+  padding: 0.2rem 0.55rem;
+}
+.tag-accent { border-color: var(--accent); color: var(--accent); }
+
+/* ── PROJECT CARD ───────────────────────────────────────────── */
+.project-card {
+  border-top: 1px solid var(--ink-xlight);
+  padding: 1.8rem 0;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  transition: border-color 0.2s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.project-card:hover { 
+    border-top-color: var(--accent); 
+    background-color: var(--ink);
+    padding-left: 1rem;
+    transition: background-color 0.25s ease, padding-left 0.25s ease, border-color 0.25 ease;
+}
+.project-card:hover .project-title { 
+    color: #F4F1EC; 
+}
+
+.project-card:hover .project-desc {
+  color: rgba(244, 241, 236, 0.65);
+}
+
+.project-card:hover .project-number {
+    color: #F4F1EC;
+}
+
+.project-meta { display: flex; flex-direction: column; gap: 0.4rem; }
+.project-number { 
+    font-size: 1.5rem; 
+    font-weight: bolder;
+    letter-spacing: 0.1em; 
+    color: var(--ink-light); 
+}
+
+.project-year { 
+    font-size: 1.1rem; 
+    color: var(--ink-light); 
+}
+
+.project-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s;
+}
+
+.project-desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  margin-bottom: 0.8rem;
+}
+
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* ── REVEAL ANIMATION ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--ink-xlight);
+  padding: 2rem var(--page-pad-x);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.site-footer p {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-light);
+  text-transform: uppercase;
+}
+.site-footer a { color: var(--ink-mid); transition: color 0.2s; }
+.site-footer a:hover { color: var(--accent); }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --page-pad-x: 1.25rem; }
+  .nav-links { gap: 1.2rem; }
+  .nav-links a { font-size: 0.62rem; }
+  .project-card { grid-template-columns: 1fr; gap: 0.75rem; }
+}
