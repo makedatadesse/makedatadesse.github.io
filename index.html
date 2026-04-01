@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Makeda Y. Tadesse — Data Storyteller</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    html, body { height: 100%; overflow-x: hidden; }
+
+    /* ── PAGE LAYOUT ─────────────────────────────────────────
+       Two-column grid that spans the full page height.
+       Left: sticky red block that stays fixed in viewport.
+       Right: scrollable column with all content.
+    ──────────────────────────────────────────────────────── */
+    .page-layout {
+      display: grid;
+      grid-template-columns:35% 1fr;
+      min-height: 100vh;
+      align-items: start;
+    }
+
+    /* ── LEFT: sticky red block ── */
+    .panel-left {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background-color: var(--accent);
+      overflow: hidden;
+    }
+
+    .panel-left-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/bahir.png');
+      background-size: cover;
+      background-position: center;
+      mix-blend-mode: multiply;
+      opacity: 0.22;
+      filter: grayscale(100%);
+    }
+
+    /* Grain texture */
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Vertical label */
+    .panel-left-label {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: rgba(244, 241, 236, 0.45);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      z-index: 2;
+    }
+
+    /* ── RIGHT: scrollable content column ── */
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HERO TEXT (top of right column) ── */
+    .hero-photo {
+      width: 90px;
+      height: 90px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top; /* adjust if face is being cropped */
+      display: block;
+    }
+
+    .hero-text {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: calc(var(--nav-height) + 3rem) 4rem 4rem 4rem;
+      position:relative;
+    }
+
+    .hero-text-inner { 
+        max-width: 480px; 
+        margin-left: 4rem;
+    
+    }
+
+    .hero-title {
+      font-family: var(--font-bold);
+      font-size: clamp(8rem, 4vw, 4.2rem);
+      line-height: .5;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+
+    .hero-statement {
+      font-family: var(--font-serif);
+      font-size: 0.93rem;
+      line-height: 1.8;
+      color: var(--ink-deep);
+      max-width: auto;
+      margin-bottom: 2.4rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ink-xlight);
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.6s forwards;
+    }
+
+    .hero-statementlink {
+        color: var(--accent-2);
+        text-decoration: underline;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.8s forwards;
+    }
+
+    .hero-link {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      border-bottom: 1px solid var(--ink-xlight);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .hero-link:hover { color: var(--accent); border-color: var(--accent); }
+    .hero-link.primary { color: var(--accent); border-color: var(--accent); }
+    .hero-link.primary:hover { color: var(--accent-dark); border-color: var(--accent-dark); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      right: 2.5rem;
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.2s forwards;
+    }
+    .scroll-hint::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 28px;
+      background: var(--ink-xlight);
+      animation: scrollLine 1.8s ease-in-out 1.5s infinite;
+    }
+    @keyframes scrollLine {
+      0%   { transform: scaleY(1);   opacity: 1; }
+      50%  { transform: scaleY(0.3); opacity: 0.4; }
+      100% { transform: scaleY(1);   opacity: 1; }
+    }
+
+    /* ── SELECTED WORKS (below hero text, still in right column) ── */
+    .works-section {
+      padding: 4rem 4rem 6rem 4rem;
+      border-top: 1px solid var(--ink-xlight);
+    }
+
+    .works-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 2rem;
+    }
+
+    .works-title {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .works-all {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      border-bottom: 1px solid var(--ink-xlight);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .works-all:hover { color: var(--accent); border-color: var(--accent); }
+
+    .project-card:last-child {
+      border-bottom: 1px solid var(--ink-xlight);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .panel-left  { position: relative; height: 38vh; }
+      .hero-text   { min-height: auto; padding: 3rem 1.5rem; }
+      .works-section { padding: 3rem 1.5rem 4rem; }
+      .site-footer { padding: 2rem 1.5rem; }
+      .scroll-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- Two-column page layout -->
+  <div class="page-layout">
+
+    <!-- LEFT: sticky red panel -->
+    <div class="panel-left">
+      <div class="panel-left-bg"></div>
+      <span class="panel-left-label">DATA · meets · MEMORY</span>
+    </div>
+
+    <!-- RIGHT: all scrollable content -->
+    <div class="panel-right">
+
+      <!-- Hero text -->
+      <div class="hero-text">
+        <div class="hero-text-inner">
+          <div class="hero-photo">
+            <img src="images/me.png" alt="photo of makeda"/>
+          </div>
+          <h1 class="hero-title">Makeda<br><em>Tadesse</em></h1>
+          <p class="hero-statement">
+            I’m an interdisciplinary artist and data storyteller specializing in digital humanities and data visualization. What’s found at this 
+            intersection of data science and narrative is my passion for research: thriving in themes of memory, refugee stories and global politics, 
+            and ethnomusicology. Using interactive map-making and archives, I’m excited by the possibilities of using design and data to disseminate 
+            information and research. <br>
+            
+            I am completing my M.S. in Data Analytics and Visualization at the Pratt Institute, with a dual-certificate in Digital Humanities and 
+            Spatial Analysis. Before this, I worked as an Assistant Curator and Producer at <a href="https://publicfunctionary.org/" class="hero-statementlink">Public Functionary</a> in Minneapolis, Minnesota, and as a 
+            Research Lead at the University of Minnesota’s <a href="https://www.hhh.umn.edu/research-centers/roy-wilkins-center-human-relations-and-social-justice" class="hero-statementlink">Roy Wilkins Center for Human Relations and Social Justice</a>. My 6+ years of experience in 
+            research, storytelling, data science, and the arts continues to become refined as I grow in my education. <br> <br>
+
+            To learn more about my creative projects, check out <a href="http://127.0.0.1:5500/RBrain.html" class="hero-statementlink">Right Brain</a>
+
+
+          </p>
+          <div class="hero-links">
+            <a href="https://github.com/makedatadesse" target="_blank" class="hero-link">Github ↗</a>
+            <a href="https://www.linkedin.com/in/makedatadesse" target="_blank" class="hero-link">LinkedIn ↗</a>
+            <a href="https://medium.com/@tadesse.mak" target="_blank" class="hero-link">Medium ↗</a>
+            <a href="https://substack.com/@duhkey2fly" target="_blank" class="hero-link">Substack ↗</a>
+          </div>
+        </div>
+        <div class="scroll-hint">Featured works below</div>
+      </div>
+
+      <!-- Selected Works -->
+      <section class="works-section">
+        <div class="works-header reveal">
+          <h2 class="works-title">Selected Works</h2>
+          <a href="projects.html" class="works-all">All Projects →</a>
+        </div>
+
+        <!-- Project 01 -->
+        <a href="neighborhood-corridor.html" class="project-card reveal">
+          <div class="project-meta">
+            <span class="project-number">01</span>
+            <span class="project-year">2024 – Present</span>
+            <span class="tag tag-accent">IRB Certified</span>
+          </div>
+          <div>
+            <h3 class="project-title">Neighborhood Corridor</h3>
+            <p class="project-desc">
+            An interactive project mapping the potential route refugees in 1989-1995 Ethiopia 
+             and Eritrea may have taken to Khartoum, Sudan, taking into account conflict zones 
+             and elevation. Part 2, <strong><i>Neighborhood Resurrection</i></strong> is ongoing and investigates 
+             the story of childhood best-friends that reunited after fleeing to different camps 
+             forty years later.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Story Map</span>
+              <span class="tag">ArcGIS Pro</span>
+              <span class="tag">Mapbox</span>
+              <span class="tag">Python</span>
+            </div>
+          </div>
+        </a>  
+
+        <!-- Project 02 -->
+        <a href="http://127.0.0.1:5500/language-tracking.html" class="project-card reveal">
+          <div class="project-meta">
+            <span class="project-number">02</span>
+            <span class="project-year">2025 – Present</span>
+          </div>
+          <div>
+            <h3 class="project-title">Tracking Ethnic Enclaves and English Language Adoption</h3>
+            <p class="project-desc">
+              A spatial analysis of Somali acculturation patterns in three distinct U.S. counties: Hennepin (Minnesota), Franklin (Ohio), and King (Washington)
+            </p>
+            <div class="project-tags">
+              <span class="tag">R</span>
+              <span class="tag">ArcGIS Pro</span>
+              <span class="tag">Mapbox</span>
+              <span class="tag">Python</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 03 -->
+        <a href="https://static1.squarespace.com/static/5ad6b09c0dbda34498599492/t/66a563db19046d0fe4a468c2/1722115037362/Digital+Program-+Artist+Interviews.pdf?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnto4ClMMibgo3OXlFaTzYyCRf5YAgrqG7XsgPkrSKTJGR9-exyK02eL2P3-Y_aem_iTUTxuCHX1ub0Uu7_CP2lQ" class="project-card reveal">
+          <div class="project-meta">
+            <span class="project-number">03</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div>
+            <h3 class="project-title">Return, Remains</h3>
+            <p class="project-desc">
+                A digital repository exploring nostalgia across diasporic narratives with interviews and reflections from artists part of Adera Lije; Adera Lijen.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Interviews</span>
+              <span class="tag">Curatorial</span>
+              <span class="tag">Qualitative Research</span>
+            </div>
+          </div>
+        </a>
+
+      </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+    </div><!-- end .panel-right -->
+  </div><!-- end .page-layout -->
+
+  <script src="js/main.js"></script>
+</body>
+</html>
