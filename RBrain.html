@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RBrain — Makeda Y. Tadesse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Mea+Culpa&family=Monsieur+La+Doulaise&display=swap" rel="stylesheet" href="css/style2.css"/>
+  <style>
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #080808;
+    }
+
+    /* ── FULL BLEED BACKGROUND ── */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* B&W atmospheric placeholder — swap for your image:
+       .lock-bg { background-image: url('images/your-image.jpg'); } */
+    .lock-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url(images/hand.jpg);
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(100%);
+    }
+
+    /* Prussian blue tint layer */
+    .lock-tint {
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 14, 16, 0.5);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    /* Spotlight — bright square bloom in center */
+    .lock-peephole {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(550px, 85vw);
+      height: min(550px, 85vw);
+      border-radius: 50%;
+      background-image: url(images/hand.jpg);
+      background-size: 110vw;
+      background-position: center;
+      filter: grayscale(100%);
+      opacity: 9;
+}
+
+    /* Dark vignette pushing edges to black */
+    .lock-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 80% 80% at 50% 50%,
+        transparent 30%,
+        rgba(0, 0, 0, 0.55) 70%,
+        rgba(0, 0, 0, 0.88) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* Grain */
+    .lock-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    /* ── CORNER METADATA — route map UI feel ── */
+    .lock-corner {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(180, 200, 255, 0.28);
+      z-index: 5;
+      pointer-events: none;
+      line-height: 1.8;
+    }
+    .lock-corner-tl { top: 1.8rem; left: 2rem; }
+    .lock-corner-tr { top: 1.8rem; right: 2rem; text-align: right; }
+    .lock-corner-bl { bottom: 1.8rem; left: 2rem; }
+    .lock-corner-br { bottom: 1.8rem; right: 2rem; text-align: right; }
+
+    /* ── PASSWORD WINDOW ── */
+    .lock-window {
+      position: relative;
+      z-index: 10;
+      width: min(380px, 90vw);
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      padding: 2.2rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* Window chrome bar at top */
+
+    .lock-window-chrome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(180, 200, 255, 0.1);
+      padding-bottom: 0.8rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .lock-window-title {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(180, 200, 255, 0.45);
+    }
+
+    /* Blinking status dot */
+    .lock-status {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(180, 200, 255, 0.3);
+    }
+
+    .lock-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(192, 57, 43, 0.8);
+      animation: blink 1.6s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.2; }
+    }
+
+    /* Main heading inside window */
+    .lock-heading {
+      font-family: var(--font-bold);
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 0.7;
+      color: rgba(220, 230, 255, 0.92);
+      margin-bottom: 0.6rem;
+    }
+    .lock-heading em { font-family: 'Monsieur La Doulaise'; color: #95b1ffc3;}
+
+    .lock-subtext {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      line-height: 1.7;
+      color: rgba(160, 180, 220, 0.5);
+      margin-bottom: 1.8rem;
+    }
+
+    /* Input row */
+    .lock-input-row {
+      display: flex;
+      border: 1px solid rgba(180, 200, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      transition: border-color 0.2s;
+      margin-bottom: 0.5rem;
+    }
+
+    .lock-input-row:focus-within {
+      border-color: rgba(180, 200, 255, 0.45);
+    }
+
+    .lock-input-row.error {
+      border-color: rgba(192, 57, 43, 0.7);
+    }
+
+    .lock-input {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: rgba(220, 230, 255, 0.9);
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0.7rem 0.9rem;
+    }
+
+    .lock-input::placeholder {
+      color: rgba(160, 180, 220, 0.3);
+      letter-spacing: 0.1em;
+    }
+
+    .lock-submit {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(220, 230, 255, 0.8);
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      border-left: 1px solid rgba(180, 200, 255, 0.15);
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+
+    .lock-submit:hover {
+      background: rgba(192, 57, 43, 0.25);
+      color: rgba(220, 230, 255, 1);
+    }
+
+    .lock-error {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: rgba(192, 57, 43, 0.8);
+      opacity: 0;
+      transition: opacity 0.2s;
+      min-height: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .lock-error.visible { opacity: 1; }
+
+    /* Back link */
+    .lock-back {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(160, 180, 220, 0.3);
+      border-bottom: 1px solid rgba(160, 180, 220, 0.12);
+      padding-bottom: 1px;
+      display: inline-block;
+      transition: color 0.2s, border-color 0.2s;
+      margin-top: 0.5rem;
+      text-decoration: none;
+    }
+
+    .lock-back:hover {
+      color: rgba(220, 230, 255, 0.7);
+      border-color: rgba(220, 230, 255, 0.3);
+    }
+
+    /* ══════════════════════════════════════════
+       RBRAIN CONTENT
+    ══════════════════════════════════════════ */
+    #rbrain-content {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    #rbrain-content.visible {
+      display: block;
+    }
+
+    #rbrain-content.faded {
+      opacity: 1;
+    }
+
+    .rbrain-header {
+      padding-top: calc(var(--nav-height) + 4rem);
+      padding-left: var(--page-pad-x);
+      padding-right: var(--page-pad-x);
+      padding-bottom: 3rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      border-bottom: 1px solid var(--ink-xlight);
+    }
+
+    .rbrain-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .rbrain-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .rbrain-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .rbrain-intro {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--ink-mid);
+      max-width: 540px;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ink-xlight);
+    }
+
+    /* List — mirrors Selected Works */
+    .rbrain-list {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--page-pad-x) 6rem;
+    }
+
+    .rbrain-item {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 1.8rem 0;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      transition: background-color 0.25s ease, padding-left 0.25s ease, border-color 0.25s ease;
+    }
+
+    .rbrain-item:last-child {
+      border-bottom: 1px solid var(--ink-xlight);
+    }
+
+    .rbrain-item:hover {
+      background-color: var(--ink);
+      padding-left: 1rem;
+      border-top-color: var(--accent);
+    }
+
+    .rbrain-item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .rbrain-item-number,
+    .rbrain-item-date {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      transition: color 0.25s;
+    }
+
+    .rbrain-item:hover .rbrain-item-number,
+    .rbrain-item:hover .rbrain-item-date {
+      color: rgba(244, 241, 236, 0.35);
+    }
+
+    .rbrain-item-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      transition: color 0.25s;
+    }
+
+    .rbrain-item:hover .rbrain-item-title { color: #F4F1EC; }
+
+    .rbrain-item-desc {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      margin-bottom: 0.8rem;
+      transition: color 0.25s;
+    }
+
+    .rbrain-item:hover .rbrain-item-desc {
+      color: rgba(244, 241, 236, 0.6);
+    }
+
+    .rbrain-item:hover .tag {
+      color: rgba(244, 241, 236, 0.45);
+      border-color: rgba(244, 241, 236, 0.15);
+    }
+
+    .rbrain-item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    /* Footer */
+    .rbrain-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rbrain-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .rbrain-footer a { color: var(--ink-mid); transition: color 0.2s; }
+    .rbrain-footer a:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .rbrain-item { grid-template-columns: 1fr; gap: 0.75rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="RBrain.html" class="nav-logo">
+        <img src="images/sig.png" alt="MT" />
+    </a>
+
+  <!-- ── LOCK SCREEN ── -->
+  <div id="lock-screen">
+
+    <div class="lock-bg"></div>
+    <div class="lock-tint"></div>
+    <div class="lock-vignette"></div>
+    <div class="lock-grain"></div>
+    <div class="lock-peephole"></div>
+
+
+
+
+    <!-- Corner labels -->
+    <div class="lock-corner lock-corner-br" style="position:absolute;bottom:1.8rem;right:2rem;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(180,200,255,0.25);z-index:5;pointer-events:none;text-align:right;">
+      New York, NY<br>
+      Pratt Institute
+    </div>
+
+    <!-- Password window -->
+    <div class="lock-window">
+
+      <!-- Window chrome -->
+      <div class="lock-window-chrome">
+        <span class="lock-window-title">RightBrain.exe</span>
+        <div class="lock-status">
+          <span class="lock-dot"></span>
+          Under Construction
+        </div>
+      </div>
+
+      <h1 class="lock-heading">This page is<br><em>under construction</em></h1>
+      <p class="lock-subtext">
+        This page is still being built, check back soon
+      </p>
+
+      <div class="lock-input-row" id="input-row">
+        <input
+          class="lock-input"
+          id="password-input"
+          type="password"
+          placeholder="Enter Password"
+          autocomplete="off"
+        />
+        <button class="lock-submit" id="submit-btn">Enter →</button>
+      </div>
+
+      <span class="lock-error" id="error-msg">Incorrect. Try again.</span>
+
+      <a href="index.html" class="lock-back">← Return home</a>
+
+    </div>
+  </div>
+
+  <!-- ── RBRAIN CONTENT ── -->
+  <div id="rbrain-content">
+
+    <nav class="site-nav">
+      <a href="RBrain.html" class="nav-logo">Makeda Y. Tadesse</a>
+      <ul class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="resume.html">Résumé</a></li>
+      </ul>
+    </nav>
+
+    <div class="rbrain-header">
+      <span class="rbrain-eyebrow">RBrain — Preview</span>
+      <h1 class="rbrain-title">Work in<br><em>Progress.</em></h1>
+      <p class="rbrain-intro">
+        A space for work that is still being shaped. These entries are early-stage, ongoing, or experimental — shared selectively.
+      </p>
+    </div>
+
+    <div class="rbrain-list">
+
+      <div class="rbrain-item">
+        <div class="rbrain-item-meta">
+          <span class="rbrain-item-number">01</span>
+          <span class="rbrain-item-date">Ongoing</span>
+        </div>
+        <div>
+          <h3 class="rbrain-item-title">Placeholder Entry One</h3>
+          <p class="rbrain-item-desc">
+            Description of this in-progress project or idea. Replace with whatever belongs in RBrain — a project, a research thread, a concept in development.
+          </p>
+          <div class="rbrain-item-tags">
+            <span class="tag">Tag One</span>
+            <span class="tag">Tag Two</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rbrain-item">
+        <div class="rbrain-item-meta">
+          <span class="rbrain-item-number">02</span>
+          <span class="rbrain-item-date">2025</span>
+        </div>
+        <div>
+          <h3 class="rbrain-item-title">Placeholder Entry Two</h3>
+          <p class="rbrain-item-desc">
+            Another entry. Duplicate the rbrain-item block above to add more rows.
+          </p>
+          <div class="rbrain-item-tags">
+            <span class="tag">Tag One</span>
+            <span class="tag">Tag Two</span>
+            <span class="tag">Tag Three</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rbrain-item">
+        <div class="rbrain-item-meta">
+          <span class="rbrain-item-number">03</span>
+          <span class="rbrain-item-date">2025</span>
+        </div>
+        <div>
+          <h3 class="rbrain-item-title">Placeholder Entry Three</h3>
+          <p class="rbrain-item-desc">
+            A third entry. Same pattern throughout — number, date, title, description, tags.
+          </p>
+          <div class="rbrain-item-tags">
+            <span class="tag">Tag One</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ── PASSWORD CONFIG ────────────────────────────────────────
+    // ↓↓ CHANGE THIS to your actual password ↓↓
+    const CORRECT_PASSWORD = 'youvegotmail';
+    // ──────────────────────────────────────────────────────────
+
+    const input      = document.getElementById('password-input');
+    const submitBtn  = document.getElementById('submit-btn');
+    const inputRow   = document.getElementById('input-row');
+    const errorMsg   = document.getElementById('error-msg');
+    const lockScreen = document.getElementById('lock-screen');
+    const rbContent  = document.getElementById('rbrain-content');
+
+    function attempt() {
+      if (input.value === CORRECT_PASSWORD) {
+        lockScreen.style.opacity = '0';
+        lockScreen.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          lockScreen.style.display = 'none';
+          document.body.style.overflow = 'auto';
+          document.body.style.background = 'var(--bg)';
+          rbContent.style.display = 'block';
+          requestAnimationFrame(() => rbContent.classList.add('faded'));
+        }, 500);
+      } else {
+        inputRow.classList.add('error');
+        errorMsg.classList.add('visible');
+        input.value = '';
+        input.focus();
+        setTimeout(() => inputRow.classList.remove('error'), 1200);
+      }
+    }
+
+    submitBtn.addEventListener('click', attempt);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') attempt();
+      inputRow.classList.remove('error');
+      errorMsg.classList.remove('visible');
+    });
+  </script>
+
+</body>
+
+</html>

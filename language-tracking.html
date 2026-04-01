@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracking Immigrant Acculturation Patterns</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    /* ══════════════════════════════════════════
+       PROJECT PAGE — SPECIFIC STYLES
+    ══════════════════════════════════════════ */
+
+    body { 
+        overflow-x: hidden; 
+        background-image: none;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ── HERO ── */
+    .project-hero {
+      width: 100%;
+      min-height: 90vh;
+      display: grid;
+      grid-template-columns: 42% 1fr;
+      align-items: stretch;
+    }
+
+    /* Left: hero image */
+    .project-hero-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink-xlight);
+      min-height: 60vh;
+    }
+
+    .project-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(15%);
+      transition: transform 0.6s ease;
+    }
+
+    /* Right: title block */
+    .project-hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: calc(var(--nav-height) + 4rem) 4rem 3.5rem 4rem;
+    }
+
+    /* COME BACK TO */
+    .project-hero-eyebrow {
+      font-family: "Inconsolata";
+      font-weight: bolder;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    /* COME BACK TO */
+
+
+    .project-hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.35s forwards;
+    }
+
+    .project-hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .project-hero-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      max-width: 400px;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ink-xlight);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    /* ── METADATA BAR ── */
+    .meta-bar {
+      border-top: 1px solid var(--ink-xlight);
+      border-bottom: 1px solid var(--ink-xlight);
+      padding: 1.2rem var(--page-pad-x);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: var(--bg);
+      top: var(--nav-height);
+      z-index: 90;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-right: 2.5rem;
+      border-right: 1px solid var(--ink-xlight);
+      margin-right: 2.5rem;
+    }
+
+    .meta-item:last-child {
+      border-right: none;
+      margin-right: 0;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .meta-value {
+      font-family: "Inconsolata," monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .meta-value.ongoing { color: var(--accent); }
+    .meta-value.complete { color: var(--accent-3); }
+
+    /* ── CONTENT WRAPPER ── */
+    .project-content {
+      max-width: 85%;
+      margin: 0 auto;
+      padding: 5rem var(--page-pad-x) 0;
+    }
+
+    /* ── SECTION BLOCK ── */
+    .project-section {
+      margin-bottom: 5rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-bold);
+      font-size: 0.6rem;
+      font-weight: bolder;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Numbered section indicator */
+    .section-eyebrow::before {
+      content: attr(data-num);
+      font-size: 0.55rem;
+      color: var(--ink-light);
+      border: 1px solid var(--ink-xlight);
+      padding: 0.15rem 0.4rem;
+      letter-spacing: 0.08em;
+    }
+
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── BODY TEXT ── */
+    .project-body {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--ink-deep);
+    }
+
+    .project-body p {
+      margin-bottom: 1.2rem;
+    }
+
+    .project-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-body strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .hyperlink {
+        color: var(--accent-2);
+        text-decoration: underline;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 0 1rem 1.8rem;
+      margin: 2.5rem 0;
+    }
+
+    .pull-quote p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .pull-quote cite {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      font-style: normal;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--ink-xlight);
+      margin: 3.5rem 0;
+    }
+
+    /* ── FULL-WIDTH VISUAL ── */
+    .visual-full {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 3rem 0;
+    }
+
+    .visual-full img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-full iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    .visual-caption {
+      max-width: 860px;
+      margin: 0.75rem auto 0;
+      padding: 0 var(--page-pad-x);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    .orderedlist {
+      margin-left: 50px;
+      margin-top: -1rem;
+    }
+    
+    /* ── INLINE VISUAL (contained width) ── */
+    .visual-inline {
+      margin: 2.5rem 0;
+      width: 100%;
+    }
+
+    .keygroup {
+      display: block;
+      width: 50%;
+      margin: 0 auto;
+      margin-bottom: -3rem;
+    }
+
+    .keygroup img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: -2rem;
+    }
+
+    .keycaption {
+      margin-bottom: -1rem;
+    }
+
+    .keycaption img {
+      width: 50%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .visual-inline img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-inline iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+    }
+
+    .visual-inline .visual-caption {
+      padding: 0;
+      margin-top: 0.6rem;
+    }
+
+    /* ── TWO-COLUMN: image + caption ── */
+    .visual-three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin: 2rem auto;
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+      margin-bottom: -1rem;
+    }
+
+    .visual-three-col-item {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .visual-three-col-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-three-col-item .visual-caption {
+      padding: 0.75rem;
+      margin: 0;
+    }
+
+    /* style="aspect-ratio:4/3;background:var(--ink-xlight);display:flex;align-items:center;justify-content:center;"*/
+
+    /* ── PROCESS IMAGE + TEXT (side by side) ── */
+    .process-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin: 2.5rem 0;
+    }
+
+    .process-row.reverse { direction: rtl; }
+    .process-row.reverse > * { direction: ltr; }
+
+    .process-row img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--ink-xlight);
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--ink);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      line-height: 1.7;
+      color: rgba(244, 241, 236, 0.85);
+      white-space: pre;
+      margin: 0;
+    }
+
+    .code-block-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── STAT CALLOUT ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--ink-xlight);
+      margin: 2.5rem 0;
+    }
+
+    .stat-item {
+      background: var(--bg);
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+
+    /* ── EMBEDDED LINK BLOCK ── */
+    .embed-link {
+      border: 1px solid var(--ink-xlight);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .embed-link:hover {
+      border-color: var(--accent);
+      background: rgba(192, 57, 43, 0.03);
+    }
+
+    .embed-link-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .embed-link-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+  .embed-link-title {
+      font-family: var(--font-mono);
+      font-weight: bolder;
+      font-size: 2rem;
+      color: var(--ink);
+    }
+
+    .embed-link-arrow {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .embed-link:hover .embed-link-arrow {
+      transform: translate(3px, -3px);
+    }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      border-top: 1px solid var(--ink-xlight);
+      margin-top: 6rem;
+      padding: 3rem var(--page-pad-x);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.25s;
+      max-width: 100%;
+    }
+
+    .next-project:hover {
+      background: var(--ink);
+    }
+
+    .next-project-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-label {
+      color: rgba(244, 241, 236, 0.4);
+    }
+
+    .next-project-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      line-height: 1.05;
+      color: var(--ink);
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-title {
+      color: #F4F1EC;
+    }
+
+    .next-project-arrow {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      color: var(--ink-light);
+      text-align: right;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .next-project:hover .next-project-arrow {
+      color: var(--accent);
+      transform: translate(6px, -6px);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .site-footer a { color: var(--ink-mid); transition: color 0.2s; }
+    .site-footer a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .project-hero { grid-template-columns: 1fr; }
+      .project-hero-image { min-height: 45vw; }
+      .project-hero-text { padding: 2.5rem 1.5rem; }
+      .process-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .process-row.reverse { direction: ltr; }
+      .visual-two-col { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .next-project { grid-template-columns: 1fr; }
+      .next-project-arrow { text-align: left; }
+      .meta-bar { gap: 1rem; }
+      .meta-item { padding-right: 1.5rem; margin-right: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .stat-row { grid-template-columns: 1fr; }
+      .project-content { padding: 3rem 1.25rem 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="project-hero">
+
+    <!-- Left: hero image — replace placeholder with your image -->
+    <div class="project-hero-image">
+        <img src="images/language/lt2.png" alt="[Country Language Analysis]"/>
+    </div>
+
+    <!-- Right: title -->
+    <div class="project-hero-text">
+      <!-- eyebrow: project type -->
+      <span class="project-hero-eyebrow">GIS · Data Storytelling</span>
+
+      <!-- main title — use <em> for italic accent word -->
+      <h1 class="project-hero-title">
+        Tracking Immigrant Acculturation Patterns Through Ethnic Enclaves and English Language Adoption
+      </h1>
+      <!-- one-sentence descriptor -->
+      <p class="project-hero-subtitle">
+        A Spatial Analysis of Somali Acculturation Patterns in U.S. Counties
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       METADATA BAR
+  ══════════════════════════════════════════ -->
+  <div class="meta-bar reveal">
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Researcher, Analyst</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Timeline</span>
+      <span class="meta-value">Jan 2025 – June 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tools</span>
+      <span class="meta-value">ArcGIS Pro · R</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Institution</span>
+      <span class="meta-value">Pratt Institute</span>
+      <span class="meta-value">Data Analysis, Spring 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span class="meta-value complete">● Complete</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
+  <article class="project-content">
+
+       <section>
+    <div class="project-body">
+        <h2>Explore on Github</h2>
+    </div>
+      <!-- Link to github repo -->
+      <a href="https://github.com/makedatadesse/language-tracking" class="embed-link reveal" target="_blank">
+        <div class="embed-link-left">
+          <span class="embed-link-label">ArcGIS · R</span>
+          <span class="embed-link-title">Repository ↗</span>
+        </div>
+        <span class="embed-link-arrow">↗</span>
+      </a>
+    </section>
+
+    <!-- ── SECTION 1: STATE THE PROBLEM/Context ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="01">Background</span>
+      <h2 class="section-heading">The Project</h2>
+
+      <div class="project-body">
+        <p>
+          This project explores the relationship between ethnic concentration and English language proficiency trends (as a means of 
+          acculturation and integration) by focusing on Somali immigrants in the United States. Ethno-religious enclaves are known to be 
+          hubs for businesses and cultural maintenance, thus the focus on an immigrant population that is more uniform in language, 
+          religion, and culture than other ethnic groups of similar size and migration pattern. 
+        </p>
+        <p>
+          The goal of this project is to visualize and quantify language adoption as an aspect of acculturation and highlight 
+          contributing factors that may accelerate or slow such adoption – specifically geographic comparisons on concentrated vs. 
+          dispersed populations. This was investigated through a case study, asking the question: <i>Does the spatial concentration of 
+          Somali residents influence English language proficiency over time?</i>
+        </p>
+      </div>
+
+      <!-- Optional: a context-setting map or image that asks the question your text answers -->
+      <div class="visual-inline reveal">
+        <img src="images/language/country.png" alt="Country Wide Somali Distribution" />
+        <p class="visual-caption">National Hotspot Analysis mapping census tracts with the highest concentration of Somali residents:<br>
+        <strong>The tracts in the US where the Somali population within each tract was greater than the broader county’s average.</strong></p>
+      </div>
+
+    
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 2: DEFINE YOUR APPROACH ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="02">The Approach</span>
+      <h2 class="section-heading">Research in Context</h2>
+
+      <div class="project-body">
+        <p>Classic spatial segregation theories suggest that ethnic enclaves prevent or slow language proficiency. This study, though hyper-focused to one specific ethnic and language group, challenges these theories by directly testing whether tightly clustered Somali populations demonstrate slower or faster growth in English proficiency.<p>
+
+<h3>
+          <i>Why Somali as a Population of Interest?</i>
+        </h3>
+        <p>
+          There is limited research that focuses on African immigrant populations at the tract level and 
+          studies their communities through socio-cultural trends. English proficiency is a variable only 
+          captured at the tract level for some indo-European, Middle Eastern, and East Asian languages; 
+          quite surprisingly, African and indigenous languages are not captured at any level more granular 
+          than at the state. To estimate English proficiency specifically amongst African immigrants at the 
+          tract-level, proportional proxies based on population were calculated using the ACS 
+          “Other languages” categories: “Other Languages,” “Other Languages; speaks English ‘very well,’” and 
+          “Other Languages; speaks English less than ‘well.’<br><br>
+          Somali as a language is <a href="https://www.igi-global.com/dictionary/ethnolinguistic-group/72624" class="hyperlink">ethnolinguistic</a>, 
+          meaning it is practiced exclusively by and tied directly to Somali people. Somalia is one of few 
+          African nations that has a singular dominant language, and potentially the only one that can be 
+          benefit from this proxying method. Ethno-religious enclaves are known to be hubs for businesses 
+          and cultural maintenance, thus the focus on an immigrant population that is more uniform in 
+          language, religion, and culture than other ethnic groups of similar size and migration pattern.<br>
+        </p>
+
+      </div>
+
+      <!-- Process image + explanation side by side -->
+      <div class="process-row reveal">
+        <div class="project-body">
+          <p>This project is best understood when situated amongst related literature. <a href="https://www.cato.org/publications/immigration-research-policy-brief/immigrants-learn-english-immigrants-language" class="hyperlink">
+            <i>Immigrants Learn English: Immigrants’ Language Acquisition Rates by Country of Origin and Demographics since 1900</i></a> 
+            by the <i>CATO Institute</i> was a project that was especially useful in relating spatial theory to language and assimilation. 
+          </p> 
+        </div>
+        <div>
+          <img src="images/language/table.png">
+          <p class="visual-caption">Change in English Proficiency Relative to Somali <i>Concentration</i>
+        </div>
+      </div>
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 3: DOCUMENT YOUR STEPS ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="03">Documentation and Workflow</span>
+      <h2 class="section-heading">Methodology</h2>
+
+      <div class="project-body">
+        <p>
+          Deeper methodology steps and code can be found on the <a href="https://github.com/makedatadesse/language-tracking?tab=readme-ov-file" class="hyperlink">github repository</a>.
+        </p>
+        <p>
+          Almost all the preliminary workflow was done in RStudio (<i>API authenticating, crosswalking 
+          census tracts, creating custom data frames and cleaning ACS variables, and exporting csv files</i>). 
+        </p>   
+        <p>
+          ArcGIS Pro was utilized to run geoprocessing tools (hotspots) to identify enclaves and then create maps based on cleaned data (as well as bridge GEOIDs and FIPS codes)
+        </p>
+        <p>
+          To begin data acquisition, an API key was requested and ran through the <a href="https://api.census.gov/data/key_signup.html" class="hyperlink" target="_blank">Census</a>. 
+          Because the Census does not capture specific African languages, a proxy using their <i>Somali ancestry</i> variable with their <i>Amharic, Somali, and other Afro-Asiatic languages</i> variable. Differences in county populations – both for Somali communities and the total population –  were weighted by taking proxy estimates and dividing by the total Somali population at the county level
+          To learn more about language proxies, refer to <i>Why Somali as a Population of Interest?</i>
+        </p>
+        <p>
+          Three segregation indices were utilized per tract and county for both time periods, and were instrumental in the creation of an aggregated concentration category:
+          <ol class="orderedlist">
+            <li>Dissimilarity Index (evenness of Somali vs. non-Somali distribution)</li>
+            <li>Isolation Index (exposure to Somali co-ethnics)</li>
+            <li>Entropy Index (linguistic heterogeneity)</li>
+          </ol>
+        </p>
+        <p>
+          A standardized “concentration score” was made to classify tracts and counties into low, moderate, or high categories.
+        </p>
+        <h5><i>Crosswalking</i></h5>
+        <p>
+          Because this project was estimating the change in language proficiency across time (2010-2016) and (2017-2021), uniformity in geographical tract information was required.
+          Between these set of years, some tract boundaries were redistributed within each county, so census tracts from 2020 boundaries were crosswalked to 2010 tracts (visit <a href="https://www.nhgis.org/geographic-crosswalks" class="hyperlink" target="_blank">IPUMS NHGIS</a> to learn more about crosswalking).
+        </p>
+        <p>
+          The updated crosswalked geographic boundaries for 2017-2020 were then utilized for analysis.
+        </p>
+      </div>
+
+
+      <!-- Stats callout
+      <div class="stat-row reveal">
+        <div class="stat-item">
+          <span class="stat-number">8,000</span>
+          <span class="stat-label">Census tracts processed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">99%</span>
+          <span class="stat-label">data retention rate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">98%</span>
+          <span class="stat-label">confidence interval</span>
+        </div>
+      </div>
+      -->
+
+      <!-- Full-width map or visualization -->
+        <!-- OPTION A: iframe embed (ArcGIS, Datawrapper, Mapbox, etc.) -->
+        <!-- <iframe src="https://your-embed-url-here" title="[Map or viz title]" allowfullscreen></iframe> -->
+
+        <!-- OPTION B: static image -->
+        <!-- <img src="images/project-name-map.jpg" alt="[Map description]" /> -->
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 4: PRESENT YOUR PRODUCTS    -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="04">Results & Visualizations</span>
+      <h2 class="section-heading">Results</h2>
+
+      <div class="project-body">
+        <p>
+          The following maps (as well as some statistical analysis) showed that Hennepin County had the most highly concentrated Somali population, the only across all counties and years to be categorized as ‘high,’ and showed the largest increase in English proficiency from 2011 to 2021.* 
+          Visual analysis confirms that moderate-to-high concentration areas exhibited variable but more positive proficiency shifts, more likely within tracts themselves with high concentrations. 
+        </p>
+        <p><i>
+          * A +9.42 percentage point increase. Franklin and King showed smaller gains, +5.28 and +2.65 respectively
+        </i></p>
+      </div>
+
+      <!-- three-column process images -->
+      <div class="keygroup reveal">
+        <div class="keycaption">
+          <img src="images/language/keybartitle.png">
+        </div>
+        <div>
+          <img src="images/language/keybar.png">
+        </div>
+      </div>
+
+      <div class="visual-three-col reveal">
+        <div class="visual-three-col-item">
+          <img src="images/language/kingcount.png">
+          <p class="visual-caption">King County</p>
+          </div>
+
+        <div class="visual-three-col-item">
+          <img src="images/language/hencount.png">
+          <p class="visual-caption">Hennepin County.</p>
+        </div>
+            
+        <div class="visual-three-col-item">
+          <img src="images/language/franklincount.png">
+          <p class="visual-caption">Franklin County.</p>            
+        </div>  
+      </div>
+      <!-- Pull quote — stakeholder, professor, or user feedback 
+      <div class="pull-quote reveal">
+        <p>"Replace this with a direct quote from a stakeholder, professor, or user that speaks to the project's impact or quality."</p>
+        <cite>— Name, Title / Role</cite>
+      </div>-->
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 5: REFLECTION ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="05">Reflection</span>
+      <h2 class="section-heading">Reflections and Analysis</h2>
+
+      <div class="project-body">
+        <p>
+          This project was revealing, and challenged original assumptions about the relationship of ethnic enclaves and language adoption. 
+          Qualitative research reveals an almost obvious answer to explain the results: more concentrated immigrant and ethnic 
+          communities are more likely to be the focus for public and non-profit resources for language learning services;
+          (this is compounded when considering immigrant enclaves are more likely to be income deficient and face higher rates of poverty: further reason for focused social safety net services). Hennepin County as a case study shows that their comparatively large gains in English proficiency in addition to period-period increase in Somali concentration may facilitate access to English learning opportunities, not deter. 
+        </p>
+        <p>
+            More research into these county’s as case studies is necessary for further illustrating the relative impact of each 
+            concentration; relevant investigations would include comparing the prioritization of language learning services in 
+            funding distribution relative to state budgets, and the relative population of Somali immigrants compared to other major 
+            immigrant populations. These steps will mitigate the heuristic (though empirically sound) classifications for concentration 
+            thresholds.
+        </p>
+        <h3>
+          <i>Future Iterations</i>
+        </h3>
+        <p>
+          The original research question sought to investigate how spatial concentrations of ethnic groups influenced language assimilation amongst refugees and immigrants post-crisis. Immigrating can be a long tedious process. Focusing on populations that likely came as refugees (by centralizing on the influx of immigration during–post conflict), may provide meaningful insight into research on ethnic enclaves that initially had less incentive or immediate expectation to learn English as compared to immigrants who may have prepared or have the motivation to learn English in their process of immigrating.<br><br>This comparative analysis of lanugage shift patterns should concentrate on populations with a distinct language or clear refugee/immigration influx.<br>
+          <strong><i>Populations of interest:</i></strong><br>
+          <ul class="orderedlist">
+            <li>Syrian <i>(recent arrival)</i></li>
+            <li>Vietnamese <i>(long established)</i></li>
+          </ul>
+        </p>
+      </div>
+
+    </section>
+
+    <hr class="section-divider" />
+    <!-- ── SECTION 6: BIBLIO ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="05">Bibliography</span>
+      <h2 class="section-heading">Supporting Literature</h2>
+      <ul class="orderedlist" style="list-style-type: circle;">
+        <li><a href="https://escholarship.org/uc/item/0j5865nk" class="hyperlink">Language Assimilation Today: Bilingualism Persists More Than in the Past, But English Still Dominates</a></li>
+        <li><a href="https://www.cato.org/publications/immigration-research-policy-brief/immigrants-learn-english-immigrants-language" class="hyperlink">Immigrants Learn English: Immigrants’ Language Acquisition Rates by Country of Origin and Demographics since 1900</a></li>
+        <li><a href="https://doi.org/10.1162/daed_a_00224" class="hyperlink">Immigration & Language Diversity in the United States</a></li>
+        <li><a href="https://www.migrationpolicy.org/article/language-diversity-and-english-proficiency-united-states" class="hyperlink">Language Diversity and English Proficiency in the United States</a></li>
+        <li><a href="https://academic.oup.com/sf/article-abstract/67/2/281/2231999?redirectedFrom=fulltext" class="hyperlink">The Dimensions of Residential Segregation</a></li>
+      </ul>
+
+
+
+  </article>
+
+  <!-- ══════════════════════════════════════════
+       BACK TO PROJECTS
+  ══════════════════════════════════════════ -->
+  <a href="projects.html" class="next-project">
+    <div>
+      <span class="next-project-label">Back</span>
+      <h3 class="next-project-title">Return to<br><em>Projects</em></h3>
+    </div>
+    <div class="next-project-arrow">→</div>
+  </a>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ── Scroll progress bar ──────────────────────────────────
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      bar.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

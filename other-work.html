@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Other Work — Makeda Y. Tadesse</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    body { background-image: none; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding-top: calc(var(--nav-height) + 4rem);
+      padding-left: var(--page-pad-x);
+      padding-right: var(--page-pad-x);
+      padding-bottom: 3rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 2rem;
+      border-bottom: 1px solid var(--ink-xlight);
+    }
+
+    .page-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1.0;
+      color: var(--ink);
+    }
+
+    .page-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .page-intro {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.8;
+      color: var(--ink-mid);
+      max-width: 380px;
+      margin-left: auto;
+      padding-bottom: 0.4rem;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--page-pad-x) 6rem;
+    }
+
+    /* ── SECTION ── */
+    .work-section {
+      padding-top: 3.5rem;
+      border-bottom: 1px solid var(--ink-xlight);
+      padding-bottom: 0.5rem;
+    }
+
+    .work-section:last-child {
+      border-bottom: none;
+    }
+
+    .work-section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .work-section-title {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .work-section-count {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    /* ── ENTRY ROW ── */
+    .entry {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 2rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--ink-xlight);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s, padding-left 0.2s, border-color 0.2s;
+    }
+
+    .entry:hover {
+      background: var(--ink);
+      padding-left: 0.75rem;
+      border-top-color: var(--accent);
+    }
+
+    /* Non-linked entry (no href) */
+    .entry-static {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 2rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--ink-xlight);
+      transition: background 0.2s, padding-left 0.2s;
+      cursor: default;
+    }
+
+    .entry-static:hover {
+      background: var(--ink);
+      padding-left: 0.75rem;
+    }
+
+    .entry-title {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.4;
+      transition: color 0.2s;
+    }
+
+    .entry:hover .entry-title,
+    .entry-static:hover .entry-title {
+      color: #F4F1EC;
+    }
+
+    .entry-source {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+
+    .entry:hover .entry-source,
+    .entry-static:hover .entry-source {
+      color: rgba(244, 241, 236, 0.4);
+    }
+
+    /* In-progress tag */
+    .entry-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--ink-xlight);
+      color: var(--ink-light);
+      padding: 0.15rem 0.45rem;
+      margin-left: 0.6rem;
+      vertical-align: middle;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .entry-tag.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .entry:hover .entry-tag,
+    .entry-static:hover .entry-tag {
+      color: rgba(244, 241, 236, 0.4);
+      border-color: rgba(244, 241, 236, 0.15);
+    }
+
+    .entry:hover .entry-tag.active {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Arrow on linked entries */
+    .entry-arrow {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--ink-light);
+      opacity: 0;
+      transition: opacity 0.2s, color 0.2s;
+      margin-left: 0.5rem;
+    }
+
+    .entry:hover .entry-arrow {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .site-footer a { color: var(--ink-mid); transition: color 0.2s; }
+    .site-footer a:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .page-header { grid-template-columns: 1fr; gap: 1rem; }
+      .page-intro { margin-left: 0; }
+      .entry, .entry-static { grid-template-columns: 1fr; gap: 0.25rem; }
+      .entry-source { margin-top: 0.1rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div>
+      <span class="page-eyebrow">Beyond the Portfolio</span>
+      <h1 class="page-title">Other<br><em>Work</em></h1>
+    </div>
+    <p class="page-intro">
+      Exhibitions, press, talks, and works in progress.
+    </p>
+  </header>
+
+  <main class="content">
+
+        <!-- ── PRESS / WRITTEN ABOUT ── -->
+    <section class="work-section">
+      <div class="work-section-header">
+        <h2 class="work-section-title">Press</h2>
+        <span class="work-section-count">— selected coverage</span>
+      </div>
+
+      <h4>Adera Lije; Adera Lijen</h4>
+      <a href="https://www.mplsart.com/written/2024/08/this-feeling-of-nostalgia-is-both-grief-and-joy-at-the-same-time-curator-makeda-tadesse-in-conversation" class="entry" target="_blank">
+        <span class="entry-title">
+          “This feeling of nostalgia is both grief and joy at the same time:” Curator Makeda Tadesse in conversation
+          <span class="entry-arrow">↗</span>
+        </span>
+        <span class="entry-source">MPLSArt, Scott Melamed · 2024</span>
+      </a>
+
+      <a href="https://northeastminneapolisartsdistrict.org/building-bridges-of-self-acceptance-in-africa-and-minnesota/" class="entry" target="_blank">
+        <span class="entry-title">
+          Building bridges of self acceptance in Africa and Minnesota
+          <span class="entry-arrow">↗</span>
+        </span>
+        <span class="entry-source">Northeast Minneapolis Arts District · 2024</span>
+      </a>
+
+      <a href="https://www.power1047.fm/post/exhibits-spotlight-east-african-diaspora-and-black-trans-lives" class="entry" target="_blank">
+        <span class="entry-title">
+          Dual exhibit spotlights East African diaspora, Black trans lives
+          <span class="entry-arrow">↗</span>
+        </span>
+        <span class="entry-source">Power 104.7, Myah Goff · 2024</span>
+      </a>
+
+    </section>
+
+    <!-- ── CURRENT / IN PROGRESS ── -->
+    <section class="work-section">
+      <div class="work-section-header">
+        <h2 class="work-section-title">Current &amp; In Progress</h2>
+        <span class="work-section-count">— ongoing</span>
+      </div>
+
+      <a href="https://docs.google.com/document/d/13DSitma8pnRTb3cWYtpq0__r5FJxWSQPHpHogKVtWVU/edit?usp=sharing" class="entry" target="_blank">
+        <span class="entry-title">
+          Neighborhood Resurrection
+          <span class="entry-tag active">Ongoing</span>
+        </span>
+        <span class="entry-source">IRB Certified · Pratt Institute</span>
+      </a>
+      
+      <a href="https://static1.squarespace.com/static/5ad6b09c0dbda34498599492/t/66a563db19046d0fe4a468c2/1722115037362/Digital+Program-+Artist+Interviews.pdf?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnto4ClMMibgo3OXlFaTzYyCRf5YAgrqG7XsgPkrSKTJGR9-exyK02eL2P3-Y_aem_iTUTxuCHX1ub0Uu7_CP2lQ" class="entry" target="_blank">
+        <span class="entry-title">
+          Return, Remains — Digital Repository
+          <span class="entry-tag active">Ongoing</span>
+        </span>
+        <span class="entry-source">Digital Humanities · Oral History</span>
+      </a>
+    
+
+    </section>
+
+    <!-- ── EXHIBITIONS CURATED ── -->
+    <section class="work-section">
+      <div class="work-section-header">
+        <h2 class="work-section-title">Curated Exhibitions</h2>
+        <span class="work-section-count">— 2021–Present</span>
+      </div>
+      <a class="entry" target="_blank">
+        <span class="entry-title">
+          Lost and Found: Mapping It Out
+          <span class="entry-arrow"></span>
+        </span>
+        <span class="entry-source">Pratt Rubelle and Norman Schafler Gallery · August 2026</span>
+      </a>
+
+      <a href="https://publicfunctionary.org/news/2024/6/27/adjera-lije-adera-lijen" class="entry" target="_blank">
+        <span class="entry-title">
+          Adera, Lije; Adera Lijen
+          <span class="entry-arrow">↗</span>
+        </span>
+        <span class="entry-source">Public Functionary · Aug 2024</span>
+      </a>
+
+      <a href="https://publicfunctionary.org/news/2024/2/14/blood-memory" class="entry" target="_blank">
+        <span class="entry-title">
+          Blood Memory: Candida Gonzalez
+          <span class="entry-arrow">↗</span>
+        </span>
+        <span class="entry-source">Public Functionary · March 2024</span>
+      </a>
+
+    </section>
+
+    <!-- ── TALKS & PRESENTATIONS ── -->
+    <section class="work-section">
+      <div class="work-section-header">
+        <h2 class="work-section-title">Talks &amp; Presentations</h2>
+        <span class="work-section-count">— selected</span>
+      </div>
+
+      <a href="https://vimeo.com/1007251479?turnstile=0.gsNzR3g7r67E3KNjbu32fV8p720B0ouhGulg139gOWziGhfhEqTd1B3EE7s1zA6ZVOoaPyDSvkv6aeuPTUCdZZbr4wZMsNYDmmIpS4fK8T5kc4iy4ghWQCc6bzhYnyYLQbARItvpYFcfQriJXLxScZ5AbCB-fzb8M8MBfj7Er8fvSok1bjXcInoh11lXFftgaph-UqbHTGnNXszMgW4crRrgrisKiDgWjxsafoKdNhvXMBPw0vxLzLW_gx5ZaVyaHVp4ty1pUTqXktUxi0AUypY2eHbIGfHjqN4Ik0Sj6TS7X3f2Bns5nHueZQofbhwUOqSE9gluEkKhYiICKYb6Py62xObCjKPabJYPQtRqxZpk6hJ4eDyWE6e9y1xbskfmnbatqcwJgY584YnLs_KCnO7wUIL54zLarDzY2vqcvAX4ll9zQBFcJZHqwGWhr7y92Hjx6lUaEzdnLde8CP2AdOADKYLEjoHXYNThTk5NVKirRTOSQc3dugAu0s7OQQnXFXurkfhcIqe9_cGE4RYCo-I0Woxj0sJ_LzlGxDpWZVOVELrfcATBHSfQYoGOaUDPYgujxHs0vQDzdLFcQC8EzA5RYwTSjrZJs78e8h5-9Raz7BWRaVBINUXgp3TTXcOW0NG8EqWf26-HJtfraw3W0vTRorI2WqCr3GCHIDugCi_A3R3gBq6-jtvnKEy_kmfGR7nBgBk3c1Irf9IqTOWtxJRsRda9PY6IclJkdp9jQ4Z_eM6bBj_nchRk94nJWNPKfD7OA4EivjQ0lQaxpHzsExFYpY7Prc6HaQf0u_FC5mkK7IURTw9u57UIG5Gze4JKfn1jQLYxJPS49WAo7mfH5dMSVtUy54CU0qmJ5HfH9_NhHOJuaax2g922jj7dgXkv-ZxkzYNOCgRcbUhhLBSvxWt61mTlkRVlMMoSkT8Lv20.Ly_EeQM9Q7z_ozD9Zewkvg.b59c35fa1926fe58223f814ccd5ad263151f36400ec3c5d4f802153b320d893e" class="entry" target="_blank">
+        <span class="entry-title">
+          Nafyar and Addis Alemu in Conversation with Makeda Tadesse
+          <span class="entry-arrow">↗</span>
+        </span>
+        <span class="entry-source">Public Functionary · 2024</span>
+      </a>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>

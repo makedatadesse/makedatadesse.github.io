@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Makeda Y. Tadesse</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    /* ── PAGE HEADER ── */
+    .projects-header {
+      padding-top: calc(var(--nav-height) + 4rem);
+      padding-left: var(--page-pad-x);
+      padding-right: var(--page-pad-x);
+      padding-bottom: 3rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .projects-page-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .projects-page-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: .7;
+      color: var(--ink);
+    }
+
+    .projects-page-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .projects-header-right {
+      padding-bottom: 0.4rem;
+    }
+
+    .projects-intro {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--ink-mid);
+      max-width: 400px;
+      margin-left: auto;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 0 var(--page-pad-x) 2.5rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--ink-xlight);
+    }
+
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      border: 1px solid var(--accent-dark);
+      background: none;
+      padding: 0.3rem 0.75rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .filter-btn:hover {
+      color: var(--ink);
+      border-color: var(--ink-mid);
+    }
+
+    .filter-btn.active {
+      color: var(--bg);
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    /* ── CARD GRID ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--ink-xlight);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      border-top: 1px solid var(--ink-xlight);
+    }
+
+    /* ── PROJECT CARD ── */
+    .proj-card {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proj-card:hover {
+      background: var(--ink);
+    }
+
+    /* Image container */
+    .proj-card-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      position: relative;
+      background: var(--ink-xlight);
+    }
+
+    .proj-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease, filter 0.25s ease;
+      filter: grayscale(20%);
+    }
+
+    .proj-card:hover .proj-card-image img {
+      transform: scale(1.03);
+      filter: grayscale(100%) brightness(0.5);
+    }
+
+    /* Image placeholder when no image yet */
+    .proj-card-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink-xlight);
+      transition: background 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-image-placeholder {
+      background: #2a2520;
+    }
+
+    .proj-card-image-placeholder span {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(3rem, 6vw, 6rem);
+      color: rgba(28, 25, 23, 0.12);
+      transition: color 0.25s ease;
+      user-select: none;
+    }
+
+    .proj-card:hover .proj-card-image-placeholder span {
+      color: rgba(244, 241, 236, 0.08);
+    }
+
+    /* Card body */
+    .proj-card-body {
+      padding: 1.6rem 1.8rem 2rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Top row: type tag + year */
+    .proj-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .proj-card-type {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      transition: color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-type {
+      color: rgba(192, 57, 43, 0.85);
+    }
+
+    .proj-card-year {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+      transition: color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-year {
+      color: rgba(244, 241, 236, 0.35);
+    }
+
+    /* Title */
+    .proj-card-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      transition: color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-title {
+      color: #F4F1EC;
+    }
+
+    /* Description */
+    .proj-card-desc {
+      font-family: var(--font-serif);
+      font-size: 0.8rem;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      margin-bottom: 1.2rem;
+      flex: 1;
+      transition: color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-desc {
+      color: rgba(244, 241, 236, 0.6);
+    }
+
+    /* Stat / outcome callout */
+    .proj-card-stat {
+      border-top: 1px solid var(--ink-xlight);
+      padding-top: 1rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      transition: border-color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-stat {
+      border-top-color: rgba(244, 241, 236, 0.12);
+    }
+
+    .proj-card-stat-number {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--accent);
+      line-height: 1;
+      transition: color 0.25s;
+    }
+
+    .proj-card:hover .proj-card-stat-number {
+      color: var(--accent);
+    }
+
+    .proj-card-stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+      line-height: 1.4;
+      transition: color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-stat-label {
+      color: rgba(244, 241, 236, 0.4);
+    }
+
+    /* Tags row */
+    .proj-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 1rem;
+    }
+
+    .proj-card-tags .tag {
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .proj-card:hover .proj-card-tags .tag {
+      color: rgba(244, 241, 236, 0.45);
+      border-color: rgba(244, 241, 236, 0.15);
+    }
+
+    /* Arrow indicator */
+    .proj-card-arrow {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    }
+
+    .proj-card:hover .proj-card-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+      color: rgba(244, 241, 236, 0.5);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      max-width: 100%;
+      margin-top: 0;
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .site-footer a {
+      color: var(--ink-mid);
+      transition: color 0.2s;
+    }
+
+    .site-footer a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .projects-header {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .projects-intro { margin-left: 0; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page header -->
+  <header class="projects-header reveal">
+    <div class="projects-header-left">
+      <span class="projects-page-label">Work</span>
+      <h1 class="projects-page-title">Current & Recent:<br><em>Projects & Essays</em></h1>
+    </div>
+    <div class="projects-header-right">
+      <p class="projects-intro">
+        A collection of data storytelling and visualization projects, as well as essays and think-pieces.<br>
+      </p>
+    </div>
+  </header>
+
+  <!-- Filter bar -->
+  <div class="filter-bar reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="data-storytelling">Data Storytelling</button>
+    <button class="filter-btn" data-filter="data-cleaning">Data Cleaning</button>
+    <button class="filter-btn" data-filter="end">Completed Projects</button>
+    <button class="filter-btn" data-filter="gis">GIS</button>
+    <button class="filter-btn" data-filter="digital-humanities">Digital Humanities</button>
+    <button class="filter-btn" data-filter="essay">Essays</button>
+  </div>
+
+  <!-- Card grid -->
+  <main class="card-grid">
+
+    <!-- 02: Neighborhood Corridor 
+            COME BACK TO: "corridor.html"-->
+    <a href="neighborhood-corridor.html"
+       class="proj-card reveal"
+       data-categories="gis digital-humanities data-storytelling end data-cleaning">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/cor.png" alt="Neighborhood Corridor">
+          <span>02</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">GIS · Story Map</span>
+          <span class="proj-card-year">2025</span>
+        </div>
+        <h2 class="proj-card-title">Neighborhood Corridor</h2>
+        <p class="proj-card-desc">
+          An interactive project mapping the potential route refugees in 1989-1995 Ethiopia and Eritrea may have taken to 
+          Khartoum, Sudan, taking into account conflict zones and elevation. 
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">↗</span>
+          <span class="proj-card-stat-label">Live on ArcGIS<br>Story Maps</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">ArcGIS Pro</span>
+          <span class="tag">Python</span>
+          <span class="tag">OpenTopography API</span>
+          <span class="tag">R</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 03: Informal Settlements 
+            COME BACK TO: "settlements.html"-->
+    <a href="settlements.html"
+       class="proj-card reveal"
+       data-categories="data-cleaning data-storytelling essay">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/settlement.png" alt="Informal Settlements">
+          <span>04</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">Policy · Refugees</span>
+          <span class="proj-card-year">2025</span>
+        </div>
+        <h2 class="proj-card-title">Mapping Informal Settlements</h2>
+        <p class="proj-card-desc">
+          Mapping the distribution of refugees and asylum seekers globally using UNHCR data.
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">↗</span>
+          <span class="proj-card-stat-label">Live on<br>Datawrapper</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">Datawrapper</span>
+          <span class="tag">R</span>
+          <span class="tag">Excel</span>
+          <span class="tag">UNHCR Data</span>
+        </div>
+      </div>
+    </a>
+    
+    
+    <!-- 04: Twin Cities Redlining 
+            COME BACK TO: "redline.html"-->
+    <a href="redline.html"
+       class="proj-card reveal"
+       data-categories="gis data-storytelling data-cleaning end essay">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/redline.png" alt="Twin Cities Redlining">
+          <span>04</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">GIS · Policy</span>
+          <span class="proj-card-year">2024 - 2025</span>
+        </div>
+        <h2 class="proj-card-title">Twin Cities Redlining</h2>
+        <p class="proj-card-desc">
+          Georeferencing historically redlined regions against current racial demographics and public 
+          transit access to measure transit deserts and patterns of public displacement across Minneapolis–St. Paul.
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">↗</span>
+          <span class="proj-card-stat-label">Live on<br>ArcGIS Online</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">ArcGIS Online</span>
+          <span class="tag">R</span>
+          <span class="tag">Excel</span>
+          <span class="tag">Census Data</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 05: Language Tracking -->
+    <a href="language-tracking.html"
+       class="proj-card reveal"
+       data-categories="data-cleaning gis end">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/ltracking.png" alt="Language Tracking">
+          <span>05</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">GIS · Statistics</span>
+          <span class="proj-card-year">2025</span>
+        </div>
+        <h2 class="proj-card-title">Tracking Immigrant Acculturation Patterns Through Ethnic Enclaves and English Language Adoption</h2>
+        <p class="proj-card-desc">
+          A spatial analysis of Somali acculturation patterns in three distinct U.S. counties: Hennepin (Minnesota), Franklin (Ohio), and King (Washington).
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">99%</span>
+          <span class="proj-card-stat-label">data retention across<br>boundary crosswalk</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">R</span>
+          <span class="tag">ArcGIS Pro</span>
+          <span class="tag">InDesign</span>
+          <span class="tag">Census API</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 06: Return, Remains 
+     COME BACK TO: "return.html"-->
+    <a href="https://static1.squarespace.com/static/5ad6b09c0dbda34498599492/t/66a563db19046d0fe4a468c2/1722115037362/Digital+Program-+Artist+Interviews.pdf?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnto4ClMMibgo3OXlFaTzYyCRf5YAgrqG7XsgPkrSKTJGR9-exyK02eL2P3-Y_aem_iTUTxuCHX1ub0Uu7_CP2lQ"
+       class="proj-card reveal"
+       data-categories="digital-humanities essay end">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/Odaa restaurant injera.jpeg" alt="Odaa Restaurant">
+          <span>06</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">Digital Humanities · Interviews</span>
+          <span class="proj-card-year">2024 - Present</span>
+        </div>
+        <h2 class="proj-card-title">Return, Remains</h2>
+        <p class="proj-card-desc">
+          A digital repository exploring nostalgia across diasporic narratives with interviews and reflections from artists part of Adera, Lije; Adera Lijen, 
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">15+</span>
+          <span class="proj-card-stat-label">artist interviews<br>conducted</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">Curatorial</span>
+          <span class="tag">Oral History</span>
+          <span class="tag">Qualitative Research</span>
+          <span class="tag">NVivo</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 07: Emotional Metadata 
+          COME BACK TO: "emotional.html"-->
+    <a href="https://drive.usercontent.google.com/download?id=1NDIGxMWhEFQDsq-aZf77uXL6qFvYWEFr&authuser=2&acrobatPromotionSource=gdrive_chrome-grid"
+       class="proj-card reveal"
+       data-categories="digital-humanities essay end data-storytelling data-cleaning">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/val.png" alt="Emotional Metadata">
+          <span>06</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">Digital Humanities · Toolkit</span>
+          <span class="proj-card-year">2025</span>
+        </div>
+        <h2 class="proj-card-title">Emotional Metadata &amp; Cultural Memory</h2>
+        <p class="proj-card-desc">
+          A toolkit for digital humanists and curators addressing the risk of artistic flattening in archival 
+          practice by building recommendations directly from conversations with artists about how their work is documented and described.
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">↗</span>
+          <span class="proj-card-stat-label">Case study toolkit</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">Curatorial</span>
+          <span class="tag">Oral History</span>
+          <span class="tag">Metadata</span>
+          <span class="tag">Qualitative Research</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 08: Queerly Guided 
+          COME BACK TO: "emotional.html"-->
+    <a href="https://storymaps.arcgis.com/stories/9cc9cbba4fc74497859835b90d835172"
+       class="proj-card reveal"
+       data-categories="digital-humanities end data-storytelling data-cleaning gis">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/queer.png" alt="Queerly Guided">
+          <span>06</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">Digital Humanities · GIS · User-Centered Design</span>
+          <span class="proj-card-year">2025 · Ongoing</span>
+        </div>
+        <h2 class="proj-card-title">Queerly Guided: The Nights We Lost in NYC</h2>
+        <p class="proj-card-desc">
+          <i>Contributed mapping, data cleaning and analysis, and user-centered research (running user experience surveys).</i><br><br>
+          Collaborative project with students part of Advanced Digital Humanities Fall 2025 the Pratt Institute.
+          Visualizes queer night life through the exploration of bars, clubs, and other nightlife venues that no longer exist in NYC.
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">↗</span>
+          <span class="proj-card-stat-label">Live on ArcGIS<br>Story Maps</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">ArcGIS Online</span>
+          <span class="tag">R</span>
+          <span class="tag">Archives</span>
+          <span class="tag">Qualitative Research</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 01: Neighborhood Resurrection 
+            COME BACK TO: "resurrection.html"-->
+    <a href="https://docs.google.com/document/d/13DSitma8pnRTb3cWYtpq0__r5FJxWSQPHpHogKVtWVU/edit?tab=t.0"
+       class="proj-card reveal"
+       data-categories="data-storytelling digital-humanities">
+      <div class="proj-card-arrow">↗</div>
+      <div class="proj-card-image">
+        <img src="images/back.png">
+          <span>01</span>
+        </div>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-card-meta">
+          <span class="proj-card-type">Data Storytelling · IRB Certified</span>
+          <span class="proj-card-year">2025 – Present</span>
+        </div>
+        <h2 class="proj-card-title">Neighborhood Resurrection</h2>
+        <p class="proj-card-desc">
+          Tracing three childhood friends who fled Ethiopia and reunited forty years later across different refugee camps and continents. A blend of spatial analysis, archival photography, oral history, and data humanities into one longitudinal narrative.
+        </p>
+        <div class="proj-card-stat">
+          <span class="proj-card-stat-number">40+</span>
+          <span class="proj-card-stat-label">years of displacement<br>mapped and documented</span>
+        </div>
+        <div class="proj-card-tags">
+          <span class="tag">ArcGIS Pro</span>
+          <span class="tag">Oral History</span>
+          <span class="tag">Spatial Analysis</span>
+          <span class="tag">Cultural Anthropology</span>
+        </div>
+      </div>
+    </a>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ── Filter logic ──────────────────────────────────────────
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.proj-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const cats = card.dataset.categories || '';
+          const show = filter === 'all' || cats.includes(filter);
+          card.style.display = show ? 'flex' : 'none';
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

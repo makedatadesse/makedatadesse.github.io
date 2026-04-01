@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapping Informal Settlements</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    /* ══════════════════════════════════════════
+       PROJECT PAGE — SPECIFIC STYLES
+    ══════════════════════════════════════════ */
+
+    body { 
+        overflow-x: hidden; 
+        background-image: none;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ── HERO ── */
+    .project-hero {
+      width: 100%;
+      min-height: 90vh;
+      display: grid;
+      grid-template-columns: 42% 1fr;
+      align-items: stretch;
+    }
+
+    /* Left: hero image */
+    .project-hero-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink-xlight);
+      min-height: 60vh;
+    }
+
+    .project-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(15%);
+      transition: transform 0.6s ease;
+    }
+
+    /* Right: title block */
+    .project-hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: calc(var(--nav-height) + 4rem) 4rem 3.5rem 4rem;
+    }
+
+    /* COME BACK TO */
+    .project-hero-eyebrow {
+      font-family: "Inconsolata";
+      font-weight: bolder;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    /* COME BACK TO */
+
+
+    .project-hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.35s forwards;
+    }
+
+    .project-hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .project-hero-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      max-width: 400px;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ink-xlight);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    /* ── METADATA BAR ── */
+    .meta-bar {
+      border-top: 1px solid var(--ink-xlight);
+      border-bottom: 1px solid var(--ink-xlight);
+      padding: 1.2rem var(--page-pad-x);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: var(--bg);
+      top: var(--nav-height);
+      z-index: 90;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-right: 2.5rem;
+      border-right: 1px solid var(--ink-xlight);
+      margin-right: 2.5rem;
+    }
+
+    .meta-item:last-child {
+      border-right: none;
+      margin-right: 0;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .meta-value {
+      font-family: "Inconsolata," monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .meta-value.ongoing { color: var(--accent); }
+    .meta-value.complete { color: var(--accent-3); }
+
+    /* ── CONTENT WRAPPER ── */
+    .project-content {
+      max-width: 85%;
+      margin: 0 auto;
+      padding: 5rem var(--page-pad-x) 0;
+    }
+
+    /* ── SECTION BLOCK ── */
+    .project-section {
+      margin-bottom: 5rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-bold);
+      font-size: 0.6rem;
+      font-weight: bolder;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Numbered section indicator */
+
+    .project-body h2 {
+        margin-bottom: -1rem;
+    }
+
+    .section-eyebrow::before {
+      content: attr(data-num);
+      font-size: 0.55rem;
+      color: var(--ink-light);
+      border: 1px solid var(--ink-xlight);
+      padding: 0.15rem 0.4rem;
+      letter-spacing: 0.08em;
+    }
+
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── BODY TEXT ── */
+    .project-body {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--ink-deep);
+    }
+
+    .project-body p {
+      margin-bottom: 1.2rem;
+    }
+
+    .project-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-body strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .hyperlink {
+        color: var(--accent-2);
+        text-decoration: underline;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 0 1rem 1.8rem;
+      margin: 2.5rem 0;
+    }
+
+    .pull-quote p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .pull-quote cite {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      font-style: normal;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--ink-xlight);
+      margin: 3.5rem 0;
+    }
+
+    /* ── FULL-WIDTH VISUAL ── */
+    .visual-full {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 3rem 0;
+    }
+
+    .visual-full img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-full iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    .visual-caption {
+      max-width: 860px;
+      margin: 0.75rem auto 0;
+      padding: 0 var(--page-pad-x);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    /* ── INLINE VISUAL (contained width) ── */
+    .visual-inline {
+      margin: 2.5rem 0;
+      width: 100%;
+    }
+
+    .keygroup {
+      display: block;
+      width: 50%;
+      margin: 0 auto;
+      margin-bottom: -3rem;
+    }
+
+    .keygroup img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: -2rem;
+    }
+
+    .keycaption {
+      margin-bottom: -2rem;
+    }
+
+    .keycaption img {
+      width: 50%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .visual-inline img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-inline iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+    }
+
+    .visual-inline .visual-caption {
+      padding: 0;
+      margin-top: 0.6rem;
+    }
+
+    /* ── TWO-COLUMN: image + caption ── */
+    .visual-three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin: 2rem auto;
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+      margin-bottom: -1rem;
+    }
+
+    .visual-three-col-item {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .visual-three-col-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-three-col-item .visual-caption {
+      padding: 0.75rem;
+      margin: 0;
+    }
+
+    /* ── PROCESS IMAGE + TEXT (side by side) ── */
+    .process-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin: 2.5rem 0;
+    }
+
+    .process-row.reverse { direction: rtl; }
+    .process-row.reverse > * { direction: ltr; }
+
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--ink);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      line-height: 1.7;
+      color: rgba(244, 241, 236, 0.85);
+      white-space: pre;
+      margin: 0;
+    }
+
+    .code-block-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── STAT CALLOUT ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--ink-xlight);
+      margin: 2.5rem 0;
+    }
+
+    .stat-item {
+      background: var(--bg);
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+
+    /* ── EMBEDDED LINK BLOCK ── */
+
+    .interactivemap {
+        margin-top: 4rem;
+    }
+
+    .embed-link {
+      border: 1px solid var(--ink-xlight);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .embed-link:hover {
+      border-color: var(--accent);
+      background: rgba(192, 57, 43, 0.03);
+    }
+
+    .embed-link-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .embed-link-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .embed-link-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink);
+    }
+
+    .embed-link-arrow {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .embed-link:hover .embed-link-arrow {
+      transform: translate(3px, -3px);
+    }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      border-top: 1px solid var(--ink-xlight);
+      margin-top: 6rem;
+      padding: 3rem var(--page-pad-x);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.25s;
+      max-width: 100%;
+    }
+
+    .next-project:hover {
+      background: var(--ink);
+    }
+
+    .next-project-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-label {
+      color: rgba(244, 241, 236, 0.4);
+    }
+
+    .next-project-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      line-height: 1.05;
+      color: var(--ink);
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-title {
+      color: #F4F1EC;
+    }
+
+    .next-project-arrow {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      color: var(--ink-light);
+      text-align: right;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .next-project:hover .next-project-arrow {
+      color: var(--accent);
+      transform: translate(6px, -6px);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .site-footer a { color: var(--ink-mid); transition: color 0.2s; }
+    .site-footer a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .project-hero { grid-template-columns: 1fr; }
+      .project-hero-image { min-height: 45vw; }
+      .project-hero-text { padding: 2.5rem 1.5rem; }
+      .process-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .process-row.reverse { direction: ltr; }
+      .visual-two-col { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .next-project { grid-template-columns: 1fr; }
+      .next-project-arrow { text-align: left; }
+      .meta-bar { gap: 1rem; }
+      .meta-item { padding-right: 1.5rem; margin-right: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .stat-row { grid-template-columns: 1fr; }
+      .project-content { padding: 3rem 1.25rem 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="project-hero">
+
+    <!-- Left: hero image — replace placeholder with your image -->
+    <div class="project-hero-image">
+        <img src="images/settlements/cover.png" alt="[Country Language Analysis]"/>
+    </div>
+
+    <!-- Right: title -->
+    <div class="project-hero-text">
+      <!-- eyebrow: project type -->
+      <span class="project-hero-eyebrow">Policy · Refugees</span>
+
+      <!-- main title — use <em> for italic accent word -->
+      <h1 class="project-hero-title">
+        UNHCR Refugee Data Visualized, 2023
+      </h1>
+      <!-- one-sentence descriptor -->
+      <p class="project-hero-subtitle">
+        Using <i>Datawrapper</i>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       METADATA BAR
+  ══════════════════════════════════════════ -->
+  <div class="meta-bar reveal">
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Researcher, Analyst</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Timeline</span>
+      <span class="meta-value">October 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tools</span>
+      <span class="meta-value">R · Datawrapper</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Institution</span>
+      <span class="meta-value">Pratt Institute</span>
+      <span class="meta-value">Information Visualization, Fall 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span class="meta-value complete">● Complete</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
+  <article class="project-content">
+
+    <section>
+    <div class="project-body">
+        <h2>Access the Data, The Source Code, The Repository</h2>
+    </div>
+      <!-- Link to github repo -->
+      <a href="https://github.com/makedatadesse/Informal-Settlements" class="embed-link reveal" target="https://github.com/makedatadesse/language-tracking">
+        <div class="embed-link-left">
+          <span class="embed-link-label">Source Code · Github · R</span>
+          <span class="embed-link-title">Github ↗</span>
+        </div>
+        <span class="embed-link-arrow">↗</span>
+      </a>
+    </section>
+
+    <hr class="section-divider"/>
+    
+    <!-- ── SECTION 1: STATE THE PROBLEM/Context ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="01">Background</span>
+      <h2 class="section-heading">The Project</h2>
+
+      <div class="project-body">
+        <p>
+         I’m interested in the variety of ways that cultures mobilize and communities sustain; a unique way to 
+         begin this study is to look at the ways in which they exist through and in the aftermath of political 
+         turmoil: the arts amidst cultural revolutions, migration and refugee crises, & language and education 
+         patterns. For this assignment, I wanted to focus on a single attribute centered on an issue that has 
+         dominated our political and media landscape in recent years: refugees.
+        </p>
+      </div>
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 2: DEFINE YOUR APPROACH ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="02">The Approach</span>
+      <h2 class="section-heading">Research in Context & Methodology</h2>
+
+      <div class="project-body">
+        <p>Rates of conflict and political violence, human rights violations, and environmental disasters have nearly 
+            doubled within just the previous decade, causing a massive swell in the number of forcibly displaced 
+            people with 2023 seeing the highest number on record. Despite major media coverage on regions of 
+            conflict in Ukraine following Russia’s invasion and Palestine, these conflicts are not uniquely made 
+            to blame. Conflicts in Sudan, Afghanistan, Colombia, and Somalia have only strengthened through the 
+            decades; and as the following sources and visualizations illustrate, their role in the global refugee 
+            crisis cannot be understated.    
+        <p>
+        <h3>
+          <i>Data</i>
+        </h3>
+        <p>
+          The data was sourced from the UNHCR’s Refugee Data Finder, inclusive of all but one of their optional 
+          population types (Host Community). The downloaded datasets were focused on specific parameters: 
+          Total refugee, IDP, and others of concern population figures for each country of origin, further 
+          delineated along age and sex for 2023.*<br><br>
+          In totality, four visualizations were created using four datasets from the UNHCR.
+        </p>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 3: DOCUMENT YOUR STEPS ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="03">Documentation and Workflow</span>
+      <h2 class="section-heading">Visualizations</h2>
+
+      <div class="project-body">
+        <p>
+            <i>*This project follows the UNHCR standard on their data finder: ‘refugee’ 
+            is a catch-all term for the following populations: Asylum-seekers, internally displaced people, 
+            stateless people, and others of concern to the UNHCR.</i>
+        </p><br>
+      </div>
+
+      <!--Distribution of Informal Settlements-->
+      <div class="project-body">
+        <h2>Distribution of Informal Settlements, 2023</h2>
+        <div class="interactivemap">
+            <div style="min-height:407px" id="datawrapper-vis-oOz7d"><script type="text/javascript" defer src="https://datawrapper.dwcdn.net/oOz7d/embed.js" charset="utf-8" data-target="#datawrapper-vis-oOz7d"></script><noscript><img src="https://datawrapper.dwcdn.net/oOz7d/full.png" alt="Distribution of Informal Settlements, 2023 (Choropleth map)" /></noscript>
+            </div><br>
+        </div>
+        <p>
+            First, I wanted to explore the distribution of informal settlements and the countries that harbored the
+            most. Unlike asylum applications or a country’s recognition of a person as a refugee, <i><strong>informal 
+            settlements</strong></i> often house persons that were made to flee or forcibly displaced in short amounts of 
+            time, often with little resource from the host country to formally resettle or recognize them.<br><br>
+            Unsurprisingly, the countries with the highest populations in informal settlements are the countries 
+            with the least infrastructure to support proper accommodations. A design choice that was used to integrate this 
+            in the map, is including the highlight hover feature over the legend. This choice was intentional, as it 
+            illustrates the severity of the refugee and IDP crisis in places such as Sudan and Somalia.
+        </p>
+        </div><br>
+
+        <!--Female Refugees by Country of Origin-->
+        <div class="process-row reveal">
+            <!--Left Column-->
+            <div class="project-body">
+                <h2>Gendered Visibility</h2>
+                <br>
+                <p>
+                    When exploring the data, the demographic feature was the most straightforward – 
+                    delineated by age and sex, this variable made way for an introductory choropleth 
+                    map detailing the countries with the highest population of female refugees. This 
+                    visualization finds that Afghanistan and Sudan had the highest total population for 
+                    refugees in 2023, leading the way to more investigation.
+                </p>
+                <h3><i>Data</i></h3>
+                <p>
+                    <i>All data, for all visualizations, was sourced from the <a href="https://www.unhcr.org/refugee-statistics/download?data_finder%5BdataGroup%5D=displacement&data_finder%5Bdataset%5D=population&data_finder%5BdisplayType%5D=demographics&data_finder%5BpopulationTypeGrouping%5D=0&data_finder%5BpopulationType%5D%5B%5D=REF&data_finder%5BpopulationType%5D%5B%5D=ASY&data_finder%5BpopulationType%5D%5B%5D=IDP&data_finder%5BpopulationType%5D%5B%5D=OIP&data_finder%5BpopulationType%5D%5B%5D=HST&data-finder=on&data_finder%5Byear__filterType%5D=range&data_finder%5Byear__rangeFrom%5D=2001&data_finder%5Byear__rangeTo%5D=2024&data_finder%5Bcoo__displayType%5D=all&data_finder%5Bcoa__displayType%5D=doNotDisplay&data_finder%5Badvanced__demoLocationName%5D=&data_finder%5Badvanced__demoUrbanRuralGrouping%5D=0&data_finder%5Badvanced__demoAccTypeGrouping%5D=0&data_finder%5Byear__%5D=&data_finder%5Bcoo__%5D=&data_finder%5Bcoa__%5D=&data_finder%5Badvanced__%5D=&data_finder%5Bsubmit%5D=&__cf_chl_rt_tk=YUKtcmSc2lqdKd4e8jGqhlEs2FSFprRuyUjaya.1isE-1758756589-1.0.1.1-tu.Axt6ULaPkFgXl9F8t.QlO5CfiMIZ__j6xwpwfkH4" class="hyperlink" target="_blank">Refugee Data Finder United Nations High Commissioner for Refugees: The UN's Refugee Agency.</a></i>
+                </p>
+            </div>
+            <!--Right Column-->            
+            <div class="interactivemap">
+                <div style="min-height:560px" id="datawrapper-vis-2xwXi">
+                    <script type="text/javascript" defer src="https://datawrapper.dwcdn.net/2xwXi/embed.js" charset="utf-8" data-target="#datawrapper-vis-2xwXi"></script>
+                    <noscript>
+                        <img src="https://datawrapper.dwcdn.net/2xwXi/full.png" alt="Female Refugees by Country of Origin, 2023 (Choropleth map)"/></noscript>    
+                </div>
+            </div>
+        </div>
+
+        <!--Refugee Population Pyramid: Afghanistan-->
+        <div class="process-row reveal">
+            <!--Left Column-->
+            <div class="interactivemap">
+                <div style="min-height:317px" id="datawrapper-vis-c4Zj9">
+                    <script type="text/javascript" defer src="https://datawrapper.dwcdn.net/c4Zj9/embed.js" charset="utf-8" data-target="#datawrapper-vis-c4Zj9"></script>
+                    <noscript>
+                        <img src="https://datawrapper.dwcdn.net/c4Zj9/full.png" alt="Population of Afghani Refugees, 2023 (Split Bars)" /></noscript>
+                </div>
+            </div>
+            <!--Right Column-->
+            <div class="project-body">
+                <h2>Refugee Population Pyramid</h2><br>
+                <p>
+                   Rates of conflict and political violence, human rights violations, and environmental disasters 
+                   have nearly doubled within just the previous decade, causing a massive swell in the number of 
+                   forcibly displaced people with 2023 seeing the highest number on record.
+                </p>
+                <p>
+                    To supplement the above maps' focus on age and sex, this visual highlighted Afghani refugees 
+                    as the sole variable.
+                </p>
+            </div>
+        </div>
+
+        <!--Share of Refugees-->
+    <div class="project-body">
+        <h2>Regional Displacement Trends</h2><br>
+        <p>
+            To visualize the scope of Afghani refugees to the global rise in vulnerable populations, a stacked area chart was 
+            created, once again divided by age and sex. The global data was exclusively a 1:1 with the Afghani data of the 
+            same sections; the total global refugee population of this year was 116,478,712 (when summing both Female and Male 
+            global refugees data, the total becomes 81,054,019). The rise may be attributed to millions of refugees where 
+            age or sex was could not be accounted for.
+        </p>
+        <div style="min-height:505px" id="datawrapper-vis-nMJBT">
+            <script type="text/javascript" defer src="https://datawrapper.dwcdn.net/nMJBT/embed.js" charset="utf-8" data-target="#datawrapper-vis-nMJBT"></script>
+            <noscript>
+                <img src="https://datawrapper.dwcdn.net/nMJBT/full.png" alt="Share of Afghani Refugees to the Global Refugee Population*, 2023 (Area Chart)" /></noscript>
+            </div><br><br>
+        <p><i>Hover over the the legend items to isolate each variable</i></p>
+        </div><br>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 5: REFLECTION ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="05">Reflection</span>
+      <h2 class="section-heading">Reflections and Analysis</h2>
+
+      <div class="project-body">
+        <p>
+            The distribution of refugees across the world is subject to continuous flux as global politics continues to intensify.
+            As of 2023, the number of refugees (and <i>internally displaced people</i>) was estimated to be about 116,478,712.
+        </p>
+        <h3>
+          <i>Future Iterations</i>
+        </h3>
+        <p>
+           This project has incredible flexibility to grow, and the data from the UNHCR should be further explored.
+           Research into the rates of change of refugee populations, and integration with projects related to migration would greatly supplement this project.
+        </p>
+      </div>
+
+    </section>
+
+  </article>
+
+  <!-- ══════════════════════════════════════════
+       BACK TO PROJECTS
+  ══════════════════════════════════════════ -->
+  <a href="projects.html" class="next-project">
+    <div>
+      <span class="next-project-label">Back</span>
+      <h3 class="next-project-title">Return to<br><em>Projects</em></h3>
+    </div>
+    <div class="next-project-arrow">→</div>
+  </a>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ── Scroll progress bar ──────────────────────────────────
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      bar.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

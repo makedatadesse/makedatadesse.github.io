@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neighborhood Corridor — Makeda Y. Tadesse</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    /* ══════════════════════════════════════════
+       PROJECT PAGE — SPECIFIC STYLES
+    ══════════════════════════════════════════ */
+
+    body { 
+        overflow-x: hidden; 
+        background-image: none;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ── HERO ── */
+    .project-hero {
+      width: 100%;
+      min-height: 90vh;
+      display: grid;
+      grid-template-columns: 42% 1fr;
+      align-items: stretch;
+    }
+
+    /* Left: hero image */
+    .project-hero-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink-xlight);
+      min-height: 60vh;
+    }
+
+    .project-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(15%);
+      transition: transform 0.6s ease;
+    }
+
+    .project-hero-image:hover img {
+      transform: scale(1.02);
+    }
+
+    /* Image placeholder */
+    .project-hero-image-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 60vh;
+      background: var(--ink-xlight);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-hero-image-placeholder span {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(4rem, 10vw, 9rem);
+      color: rgba(28, 25, 23, 0.1);
+      user-select: none;
+    }
+
+    /* Right: title block */
+    .project-hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: calc(var(--nav-height) + 4rem) 4rem 3.5rem 4rem;
+    }
+
+    /* COME BACK TO */
+    .project-hero-eyebrow {
+      font-family: "Inconsolata";
+      font-weight: bolder;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    /* COME BACK TO */
+
+
+    .project-hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.35s forwards;
+    }
+
+    .project-hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .project-hero-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      max-width: 400px;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ink-xlight);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    /* ── METADATA BAR ── */
+    .meta-bar {
+      border-top: 1px solid var(--ink-xlight);
+      border-bottom: 1px solid var(--ink-xlight);
+      padding: 1.2rem var(--page-pad-x);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: var(--bg);
+      top: var(--nav-height);
+      z-index: 90;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-right: 2.5rem;
+      border-right: 1px solid var(--ink-xlight);
+      margin-right: 2.5rem;
+    }
+
+    .meta-item:last-child {
+      border-right: none;
+      margin-right: 0;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .meta-value {
+      font-family: "Inconsolata," monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .meta-value.ongoing { color: var(--accent); }
+    .meta-value.complete { color: var(--accent-3); }
+
+    /* ── CONTENT WRAPPER ── */
+    .project-content {
+      max-width: 85%;
+      margin: 0 auto;
+      padding: 5rem var(--page-pad-x) 0;
+    }
+
+    /* ── SECTION BLOCK ── */
+    .project-section {
+      margin-bottom: 5rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-bold);
+      font-size: 0.6rem;
+      font-weight: bolder;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Numbered section indicator */
+    .section-eyebrow::before {
+      content: attr(data-num);
+      font-size: 0.55rem;
+      color: var(--ink-light);
+      border: 1px solid var(--ink-xlight);
+      padding: 0.15rem 0.4rem;
+      letter-spacing: 0.08em;
+    }
+
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── BODY TEXT ── */
+    .project-body {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--ink-deep);
+    }
+
+    .project-body p {
+      margin-bottom: 1.2rem;
+    }
+
+    .project-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-body strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 0 1rem 1.8rem;
+      margin: 2.5rem 0;
+    }
+
+    .pull-quote p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .pull-quote cite {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      font-style: normal;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--ink-xlight);
+      margin: 3.5rem 0;
+    }
+
+    /* ── FULL-WIDTH VISUAL ── */
+    .visual-full {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 3rem 0;
+    }
+
+    .visual-full img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-full iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    .visual-caption {
+      max-width: 860px;
+      margin: 0.75rem auto 0;
+      padding: 0 var(--page-pad-x);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
+      line-height: 1.6;
+    }
+
+    /* ── INLINE VISUAL (contained width) ── */
+    .visual-inline {
+      margin: 2.5rem 0;
+      width: 100%;
+    }
+
+    .visual-inline img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-inline iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+    }
+
+    .visual-inline .visual-caption {
+      padding: 0;
+      margin-top: 0.6rem;
+    }
+
+    /* ── TWO-COLUMN: image + caption ── */
+    .visual-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--ink-xlight);
+      margin: 2.5rem 0;
+    }
+
+    .visual-two-col-item {
+      background: var(--bg);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .visual-two-col-item img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .visual-two-col-item .visual-caption {
+      padding: 0.75rem;
+      margin: 0;
+    }
+
+    /* ── PROCESS IMAGE + TEXT (side by side) ── */
+    .process-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin: 2.5rem 0;
+    }
+
+    .process-row.reverse { direction: rtl; }
+    .process-row.reverse > * { direction: ltr; }
+
+    .process-row img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--ink-xlight);
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--ink);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      line-height: 1.7;
+      color: rgba(244, 241, 236, 0.85);
+      white-space: pre;
+      margin: 0;
+    }
+
+    .code-block-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── STAT CALLOUT ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--ink-xlight);
+      margin: 2.5rem 0;
+    }
+
+    .stat-item {
+      background: var(--bg);
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+
+    /* ── EMBEDDED LINK BLOCK ── */
+    .embed-link {
+      border: 1px solid var(--ink-xlight);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .embed-link:hover {
+      border-color: var(--accent);
+      background: rgba(192, 57, 43, 0.03);
+    }
+
+    .embed-link-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .embed-link-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .embed-link-title {
+      font-family: var(--font-mono);
+      font-weight: bolder;
+      font-size: 3rem;
+      color: var(--ink);
+    }
+
+    .embed-link-arrow {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .embed-link:hover .embed-link-arrow {
+      transform: translate(3px, -3px);
+    }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      border-top: 1px solid var(--ink-xlight);
+      margin-top: 6rem;
+      padding: 3rem var(--page-pad-x);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.25s;
+      max-width: 100%;
+    }
+
+    .next-project:hover {
+      background: var(--ink);
+    }
+
+    .next-project-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-label {
+      color: rgba(244, 241, 236, 0.4);
+    }
+
+    .next-project-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      line-height: 1.05;
+      color: var(--ink);
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-title {
+      color: #F4F1EC;
+    }
+
+    .next-project-arrow {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      color: var(--ink-light);
+      text-align: right;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .next-project:hover .next-project-arrow {
+      color: var(--accent);
+      transform: translate(6px, -6px);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .site-footer a { color: var(--ink-mid); transition: color 0.2s; }
+    .site-footer a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .project-hero { grid-template-columns: 1fr; }
+      .project-hero-image { min-height: 45vw; }
+      .project-hero-text { padding: 2.5rem 1.5rem; }
+      .process-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .process-row.reverse { direction: ltr; }
+      .visual-two-col { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .next-project { grid-template-columns: 1fr; }
+      .next-project-arrow { text-align: left; }
+      .meta-bar { gap: 1rem; }
+      .meta-item { padding-right: 1.5rem; margin-right: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .stat-row { grid-template-columns: 1fr; }
+      .project-content { padding: 3rem 1.25rem 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="project-hero">
+
+    <!-- Left: hero image — replace placeholder with your image -->
+    <div class="project-hero-image">
+        <img src="images/corridor.png/corridor1.png" alt="[Country Language Analysis]"/>
+    </div>
+
+    <!-- Right: title -->
+    <div class="project-hero-text">
+      <!-- eyebrow: project type -->
+      <span class="project-hero-eyebrow">GIS · Data Storytelling</span>
+
+      <!-- main title — use <em> for italic accent word -->
+      <h1 class="project-hero-title">
+        Neighborhood Corridor
+      </h1>
+      <!-- one-sentence descriptor -->
+      <p class="project-hero-subtitle">
+        Estimating Historical Refugee Routes (1980s–1990s Addis → Khartoum)
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       METADATA BAR
+  ══════════════════════════════════════════ -->
+  <div class="meta-bar reveal">
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Researcher, Analyst</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Timeline</span>
+      <span class="meta-value">September 2025 – December 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tools</span>
+      <span class="meta-value">ArcGIS Pro · R</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Institution</span>
+      <span class="meta-value">Pratt Institute</span>
+      <span class="meta-value">Advanced GIS, Fall 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span class="meta-value complete">● Complete</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
+  <article class="project-content">
+
+    <!-- ── SECTION 1: LINKS TO PROJECT ── -->
+    <section>
+    <h2 class="section-heading"></h2>
+    </div>
+      <!-- Link to storymaps -->
+      <a href="https://storymaps.arcgis.com/stories/ac843be515b841b988d229ebad65069e" class="embed-link reveal" target="_blank">
+        <div class="embed-link-left">
+          <span class="embed-link-label">ArcGIS · Python</span>
+          <span class="embed-link-title">The Project, <i>Storymaps</i> ↗</span>
+        </div>
+        <span class="embed-link-arrow">↗</span>
+      </a>
+      <!-- Link to github repo -->
+      <a href="https://github.com/makedatadesse/Neighborhood_Res_Codes/tree/main" class="embed-link reveal" target="_blank">
+        <div class="embed-link-left">
+          <span class="embed-link-label">ArcGIS · Python</span>
+          <span class="embed-link-title">Github Repository ↗</span>
+        </div>
+        <span class="embed-link-arrow">↗</span>
+      </a>
+    </section>
+
+
+  </article>
+
+  <!-- ══════════════════════════════════════════
+       BACK TO PROJECTS
+  ══════════════════════════════════════════ -->
+  <a href="projects.html" class="next-project">
+    <div>
+      <span class="next-project-label">Back</span>
+      <h3 class="next-project-title">Return to<br><em>Projects</em></h3>
+    </div>
+    <div class="next-project-arrow">→</div>
+  </a>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ── Scroll progress bar ──────────────────────────────────
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      bar.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

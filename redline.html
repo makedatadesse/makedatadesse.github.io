@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twin Cities Redline</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    /* ══════════════════════════════════════════
+       PROJECT PAGE — SPECIFIC STYLES
+    ══════════════════════════════════════════ */
+
+    body { 
+        overflow-x: hidden; 
+        background-image: none;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ── HERO ── */
+    .project-hero {
+      width: 100%;
+      min-height: 90vh;
+      display: grid;
+      grid-template-columns: 42% 1fr;
+      align-items: stretch;
+    }
+
+    /* Left: hero image */
+    .project-hero-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink-xlight);
+      min-height: 60vh;
+    }
+
+    .project-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(15%);
+      transition: transform 0.6s ease;
+    }
+
+    /* Right: title block */
+    .project-hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: calc(var(--nav-height) + 4rem) 4rem 3.5rem 4rem;
+    }
+
+    /* COME BACK TO */
+    .project-hero-eyebrow {
+      font-family: "Inconsolata";
+      font-weight: bolder;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    /* COME BACK TO */
+
+
+    .project-hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.35s forwards;
+    }
+
+    .project-hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .project-hero-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      max-width: 400px;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ink-xlight);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    /* ── METADATA BAR ── */
+    .meta-bar {
+      border-top: 1px solid var(--ink-xlight);
+      border-bottom: 1px solid var(--ink-xlight);
+      padding: 1.2rem var(--page-pad-x);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: var(--bg);
+      top: var(--nav-height);
+      z-index: 90;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-right: 2.5rem;
+      border-right: 1px solid var(--ink-xlight);
+      margin-right: 2.5rem;
+    }
+
+    .meta-item:last-child {
+      border-right: none;
+      margin-right: 0;
+    }
+
+    .meta-label {
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .meta-value {
+      font-family: "Inconsolata," monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .meta-value.ongoing { color: var(--accent); }
+    .meta-value.complete { color: var(--accent-3); }
+
+    /* ── CONTENT WRAPPER ── */
+    .project-content {
+      max-width: 85%;
+      margin: 0 auto;
+      padding: 5rem var(--page-pad-x) 0;
+    }
+
+    /* ── SECTION BLOCK ── */
+    .project-section {
+      margin-bottom: 5rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-bold);
+      font-size: 0.6rem;
+      font-weight: bolder;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Numbered section indicator */
+
+    .project-body h2 {
+        margin-bottom: -1rem;
+    }
+
+    .section-eyebrow::before {
+      content: attr(data-num);
+      font-size: 0.55rem;
+      color: var(--ink-light);
+      border: 1px solid var(--ink-xlight);
+      padding: 0.15rem 0.4rem;
+      letter-spacing: 0.08em;
+    }
+
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── BODY TEXT ── */
+    .project-body {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--ink-deep);
+    }
+
+    .project-body p {
+      margin-bottom: 1.2rem;
+    }
+
+    .project-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-body strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .hyperlink {
+        color: var(--accent-2);
+        text-decoration: underline;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 0 1rem 1.8rem;
+      margin: 2.5rem 0;
+    }
+
+    .pull-quote p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.35;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .pull-quote cite {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      font-style: normal;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--ink-xlight);
+      margin: 3.5rem 0;
+    }
+
+    /* ── FULL-WIDTH VISUAL ── */
+    .visual-full {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 3rem 0;
+    }
+
+    .visual-full img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-full iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    .visual-caption {
+      max-width: 860px;
+      margin: 0.75rem auto 0;
+      padding: 0 var(--page-pad-x);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    /* ── INLINE VISUAL (contained width) ── */
+    .visual-inline {
+      margin: 2.5rem 0;
+      width: 100%;
+    }
+
+    .keygroup {
+      display: block;
+      width: 50%;
+      margin: 0 auto;
+      margin-bottom: -3rem;
+    }
+
+    .keygroup img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: -2rem;
+    }
+
+    .keycaption {
+      margin-bottom: -2rem;
+    }
+
+    .keycaption img {
+      width: 50%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .visual-inline img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-inline iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+    }
+
+    .visual-inline .visual-caption {
+      padding: 0;
+      margin-top: 0.6rem;
+    }
+
+    /* ── TWO-COLUMN: image + caption ── */
+    .visual-three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin: 2rem auto;
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+      margin-bottom: -1rem;
+    }
+
+    .visual-three-col-item {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .visual-three-col-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .visual-three-col-item .visual-caption {
+      padding: 0.75rem;
+      margin: 0;
+    }
+
+    /* ── PROCESS IMAGE + TEXT (side by side) ── */
+    .process-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin: 2.5rem 0;
+    }
+
+    .process-row.reverse { direction: rtl; }
+    .process-row.reverse > * { direction: ltr; }
+
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--ink);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      line-height: 1.7;
+      color: rgba(244, 241, 236, 0.85);
+      white-space: pre;
+      margin: 0;
+    }
+
+    .code-block-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── STAT CALLOUT ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--ink-xlight);
+      margin: 2.5rem 0;
+    }
+
+    .stat-item {
+      background: var(--bg);
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+
+    /* ── EMBEDDED LINK BLOCK ── */
+
+    .interactivemap {
+        margin-top: 4rem;
+    }
+
+    .embed-link {
+      border: 1px solid var(--ink-xlight);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .embed-link:hover {
+      border-color: var(--accent);
+      background: rgba(192, 57, 43, 0.03);
+    }
+
+    .embed-link-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .embed-link-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .embed-link-title {
+      font-family: var(--font-mono);
+      font-weight: bolder;
+      font-size: 2rem;
+      color: var(--ink);
+    }
+
+    .embed-link-arrow {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .embed-link:hover .embed-link-arrow {
+      transform: translate(3px, -3px);
+    }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      border-top: 1px solid var(--ink-xlight);
+      margin-top: 6rem;
+      padding: 3rem var(--page-pad-x);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.25s;
+      max-width: 100%;
+    }
+
+    .next-project:hover {
+      background: var(--ink);
+    }
+
+    .next-project-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-label {
+      color: rgba(244, 241, 236, 0.4);
+    }
+
+    .next-project-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      line-height: 1.05;
+      color: var(--ink);
+      transition: color 0.25s;
+    }
+
+    .next-project:hover .next-project-title {
+      color: #F4F1EC;
+    }
+
+    .next-project-arrow {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      color: var(--ink-light);
+      text-align: right;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .next-project:hover .next-project-arrow {
+      color: var(--accent);
+      transform: translate(6px, -6px);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--ink-xlight);
+      padding: 2rem var(--page-pad-x);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-footer p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .site-footer a { color: var(--ink-mid); transition: color 0.2s; }
+    .site-footer a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .project-hero { grid-template-columns: 1fr; }
+      .project-hero-image { min-height: 45vw; }
+      .project-hero-text { padding: 2.5rem 1.5rem; }
+      .process-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .process-row.reverse { direction: ltr; }
+      .visual-two-col { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      .next-project { grid-template-columns: 1fr; }
+      .next-project-arrow { text-align: left; }
+      .meta-bar { gap: 1rem; }
+      .meta-item { padding-right: 1.5rem; margin-right: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .stat-row { grid-template-columns: 1fr; }
+      .project-content { padding: 3rem 1.25rem 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">
+        <img src="images/lbnav.png" alt="MT"/>
+    <ul class="nav-links">
+      <li><a href="index.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="other-work.html">Other Work</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="project-hero">
+
+    <!-- Left: hero image — replace placeholder with your image -->
+    <div class="project-hero-image">
+        <img src="images/redline/cover.png" alt="[Country Language Analysis]"/>
+    </div>
+
+    <!-- Right: title -->
+    <div class="project-hero-text">
+      <!-- eyebrow: project type -->
+      <span class="project-hero-eyebrow">Policy · GIS</span>
+
+      <!-- main title — use <em> for italic accent word -->
+      <h1 class="project-hero-title">
+        Twin Cities Redlining
+      </h1>
+      <!-- one-sentence descriptor -->
+      <p class="project-hero-subtitle">
+        Using <i>ArcGIS Online</i>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       METADATA BAR
+  ══════════════════════════════════════════ -->
+  <div class="meta-bar reveal">
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Researcher, Analyst</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Timeline</span>
+      <span class="meta-value">April 2025 - June 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tools</span>
+      <span class="meta-value">ArcGIS Online · R · Excel</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Institution</span>
+      <span class="meta-value">Pratt Institute</span>
+      <span class="meta-value">GIS, Spring 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span class="meta-value complete">● Complete</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════ -->
+  <article class="project-content">
+
+    <section>
+    <div class="project-body">
+        <h2>Explore the Interactive Map</h2>
+    </div>
+      <!-- Link to github repo -->
+      <a href="https://prattsavi.maps.arcgis.com/apps/mapviewer/index.html?webmap=e6530139bc774500a2d2c910931db9cc" class="embed-link reveal" target="_blank">
+        <div class="embed-link-left">
+          <span class="embed-link-label">ArcGIS Online · R</span>
+          <span class="embed-link-title">Map Viewer ↗</span>
+        </div>
+        <span class="embed-link-arrow">↗</span>
+      </a>
+    </section>
+
+    <hr class="section-divider"/>
+    
+    <!-- ── SECTION 1: STATE THE PROBLEM/Context ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="01">Background</span>
+      <h2 class="section-heading">The Project</h2>
+
+      <div class="project-body">
+        <p>
+            This project blends the work of three projects that investigated the role of redlining in the Twin Cities:<br><br>
+            <strong><i>Historic Redline</i></strong>: Investigating the influence of historic redlining on modern day educational and income levels in Minneapolis, Minnesota <br>
+            <strong><i>Ramsey Redline</i></strong>: Mapping the relationship between historically minority populous neighborhoods (Redline map) and modern public transit lines to explore disruptive public transit. This map is inspired by and will feature a boundary highlighting the historic Rondo Neighborhood.<br>
+            <strong><i>The Blueline, The Greenline, The Redline</i></strong>: To map the relationship between historically redlined regions, current racial trends in those communities, and access to public transportation to identify regions of transit deserts.<br><br>
+
+            The following covers analysis and results from all above projects.
+        </p>
+      </div>
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="02">The Approach</span>
+      <h2 class="section-heading">Research in Context & Methodology</h2>
+      <div class="project-body reveal">
+        <p>
+            This project introduces transit lines (specifically light rails) and highway constructions atop a layer on historically 
+            redlined and predominant minority (in this case, Black) neighborhoods. As of 2023, an estimated 114,000 to 167,000 vehicles 
+            drive through i-94 per day, with some estimates approximating up to 220,000 vehicles drive through i-35W daily. Their 
+            intersection, near the heart of downtown Minneapolis, is at the center of a formally redlined district, and the current 
+            site of one of the most densely populated minority and immigrant communities between both counties (Cedar-Riverside/7 Corners).
+        </p>
+        <div class="process-row reveal">
+            <!--Left Column-->
+            <div class="project-body">
+                <p>
+                    The history of the Rondo Neighborhood is not unknown, nor is the story unordinary. The construction of the 
+                    i-94 highway demolished a growing, cultural epicenter for Black Americans in the Midwest, and the ramifications 
+                    have been felt ever since.
+                </p>
+                <p>
+                    Interestingly, many articles reference the cost-of-living crisis as a public health issue (globally and domestically) more often than as an economic issue. This is supported by numerous studies over decades on the impacts of income inequality on health and wellness, and the effect of economic disparity for some impacting the broader economic well-being of a larger population; even if not felt as early or for as long, all people in any community will feel the ramifications of some living in insecurity.
+                </p>
+            </div>
+            <!--Right Column-->
+            <div>
+                <img src="images/redline/Rondo.png">
+            </div>
+        </div>
+
+        <div class="project-body">
+            <h3>Establishing the Data</h3>
+                <p>
+                    First, <a href="https://docs.google.com/spreadsheets/d/1z2gbVsq8Hx1tpw21t1I37XJDSQM4kXtW/edit?gid=1375883110#gid=1375883110" class="hyperlink">the EPI Family Budget</a> 
+                    dataset was downloaded and cleaned, reduced to just the minimum expected annual budget for a single individual (ie no dependents/children), 
+                    and GEOID's that matched Minneapolis and Saint Paul.<br>
+                    From there, the most recent <a href="https://docs.google.com/spreadsheets/d/1grWoUgN0Bj1t0bciy1jJozkNU4CW2PsDxa5nK-l1VTA/edit?gid=711165859#gid=711165859" class="hyperlink">income data</a> 
+                    from the U.S. Census was matched by GEOID to the EPI individual budget table. Both datasets were imported into ArcGIS Pro 
+                    and joined into one table, along with USA county and state boundaries from ESRI Living Atlas.
+                </p>
+                <p>
+                    2022 Census Tracts differ from the historical mapping boundaries, and many were coded as having more than one HOLC grade.
+                    To account for each tract’s variability, binary variables were created for each category (A, B, C, and D). This binary was 
+                    then quantified based on historical classification, and a new score was calculated to re-categorize each modern-dat tract: 
+                    Very High (D), High (C), Medium (B), and Low (A).
+                </p>
+                <p>
+                    <i>To see a full list of the data and layers used, refer to the end of the page and explore the interactive map</i>
+                </p>
+        </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 3:  Results ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="03">Documentation and Workflow</span>
+      <h2 class="section-heading">Visualizations and Results</h2>
+
+      <div class="project-body">
+        <p>
+            The EPI budget calculator takes into account the cost of transportation, child care, taxes, food, housing, and health care. 
+            From pure observation, there isn’t a clear correlation pattern – some red counties (high cost of living, low income) are 
+            directly next to blue counties (low costs of living and high income). Patterns don’t follow rural versus urban environments, 
+            state or county political affiliation, or even clear and strong racial demographic concentrations (one hypothesis was 
+            counties with present and active Indigenous Reservations but there was some difficulty placing this spatial data within 
+            this map)
+        </p>
+        <div class="process-row reveal">
+            <div>
+                <img src="images/redline/seven.png"
+            </div>
+        </div>
+        <p>
+            The most interesting part of this mapping project is the pattern that appears with each highway path and junction. 
+            It’s important to note that the <i>Black Neighborhood</i> classification boundaries in blue aren’t singularly the only 
+            black neighborhoods in this map, just that the populations in these neighborhoods has <i>sustained</i> the predominance 
+            of their racial composition. The story of where other low-income or communities of color clustered is shown by the redlining 
+            map itself. 
+        </p>
+      </div>
+
+      <!--Redline Score and Poverty-->
+      <div class="project-body">
+        <h3>Redline Scores, Education, and Poverty</h3>
+        <p>
+            Early iterations of this project sought to find associations between historically redlined neighborhoods and modern poverty 
+            and educational attainment metrics. Using the same data sources, the following results were found by creating regression 
+            models using R.
+        </p>
+        <h4>Results</h4>
+        <h5><i>Educational Attainment</i></h5>
+        <p>
+            The model showed higher odds of lower educational attainment (categories "D" and "C") in areas with higher redlining scores. 
+            As redlining scores increase, individuals are significantly more likely to have no high school diploma or just a high school diploma.*
+            Overall, redlined areas have higher rates of lower educational attainment and significantly lower rates for advanced degrees.**
+        </p><br>
+        <p><i>
+            *For each one-unit increase in redlining score, the odds of having only a High school diploma are multiplied by 19.21.<br>
+            **In historically redlined areas, there is a 12.335 percentage point decrease in the average proportion of individuals with 
+                professional degrees.
+        </i></p>
+
+        <h5><i>Poverty</i></h5>
+        <p>
+            'High poverty' in the model and visualization is categorized as tracts where greater than 20% of the population lives in poverty (as per Minnesota's designation of'high-poverty' areas). 
+            The model found that as redlining scores increase, poverty rates tend to rise substantially.*
+            At baseline, the research found that areas with the lowest redlining scores (largely historically A and B ratings) have an average poverty rate of ~3.97%. This is significantly lower than state and national averages (MN: ~9% as of 2019, US: ~11% as of 2022), though research indicates there are significant differences based on location across the entirety of the state.
+        </p><br>
+        <p><i>
+            *For each one-unit increase in redlining score, the poverty rate increases by ~22.22 percentage points.
+        </i></p>  
+
+        
+
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── SECTION 5: REFLECTION ── -->
+    <section class="project-section reveal">
+      <span class="section-eyebrow" data-num="05">Reflection</span>
+      <h2 class="section-heading">Reflections</h2>
+
+      <div class="project-body">
+        <p>
+            Despite strong correlations between historically redlined neighborhoods in the Twin Cities with both poor transit access 
+            and poorer predictors for socio-economic standing, it is not the sole indicator for poverty. Other systemic and public 
+            health related issues are to be considered when investigating social and racial class disparities in the Twin Cities 
+            (see: <a href="https://www.hhh.umn.edu/research-centers/roy-wilkins-center-human-relations-and-social-justice/minnesota-paradox" class="hyperlink" target="_blank"><i>Minnesota Paradox</i></a>)
+        </p>
+
+        <h4>Future Iterations</h4>
+        <p>
+            This project, despite sweeping, has the potential for more comprehensive exploration. These maps don't take into account 
+            areas with high levels of income disparity. Many of the highest metropolitan cities are within counties that 
+            show high levels of both minimum budget and mean income.
+        </p>
+        <p>
+            New York County (Manhattan), for example, has both the <a href="https://www.henleyglobal.com/publications/usa-wealth-report-2024/americas-wealthiest-cities" class="hyperlink" target="_blank">highest concentration of wealth in the US</a>, while being amongst 
+            the top 10 for cities with the highest income disparity (<a href="https://storymaps.arcgis.com/stories/a4328e9d4a1544ad92a7025fd4d670a0" class="hyperlink" target="_blank">1 in 5 New Yorkers live below the poverty line</a>). Because of this, 
+            those in the top percent with the most concentrated wealth are likely skewing mean incomes for all of New York County.
+        </p>
+        <p>
+            Further design for a map that improves upon analysis on the strength of these differences given income disparity would 
+            be incredibly more accurate in storytelling, as similar exploration with more cities.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- ── SECTION 6: DATA ── -->
+     <section class="project-section reveal">
+        <span class="section-eyebrow" data-num="06">Bibliography</span>
+        <h2 class="section-heading">Supporting Literature and Data</h2>
+        <div class="project-body">
+            <h3><i>Data</i></h3>
+            <p>
+                US Census ACS 5-year Income and Education Estimates, 2022<br>
+                University of Richmond’s Mapping Inequality historic redline map of <a href="https://dsl.richmond.edu/panorama/redlining/data/MN-St%20Paul#cityData" class="hyperlink" target="_blank">Hennepin County</a><br>
+                Recognized Rondo Neighborhood boundaries from articles (<a href="https://reconnectrondo.com/before-it-was-cut-in-half-by-i-94-st-pauls-rondo-was-a-thriving-african-american-cultural-center/" class="hyperlink" target="_blank">Reconnect Rondo</a>)<br>
+                University of Richmond’s Mapping Inequality historic redline map of <a href="https://dsl.richmond.edu/panorama/redlining/data/MN-St%20Paul#cityData" class="hyperlink" target="_blank">Ramsey County</a><br>
+                US Census ACS 5-year Income Estimates, 2022<br>
+                Living Atlas on public transit lines and highways
+            </p>
+            <h3><i>Literature and Other Projects</i></h3>
+            <p>
+                Before it was cut in half by I-94, St. Paul’s Rondo was a thriving African-American cultural center (<a href="http://reconnectrondo.com/before-it-was-cut-in-half-by-i-94-st-pauls-rondo-was-a-thriving-african-american-cultural-center/" class="hyperlink" target="_blank">Source</a>)<br>
+                Rondo Neighborhood & I-94: Overview (<a href="https://libguides.mnhs.org/rondo" class="hyperlink" target="_blank">Source</a>)<br>
+                Minnesota GIS Data and Maps (<a href="https://www.mngeo.state.mn.us/chouse/" class="hyperlink" target="_blank">Source</a>)<br>
+                MN Map Gallery (<a href="http://mngeo.state.mn.us/chouse/mapgallery.html" class="hyperlink" target="_blank">Source</a>)<br>
+                Before it was cut in half by I-94, St. Paul’s Rondo was a thriving African-American cultural center (<a href="http://reconnectrondo.com/before-it-was-cut-in-half-by-i-94-st-pauls-rondo-was-a-thriving-african-american-cultural-center/" class="hyperlink" target="_blank">Source</a>)<br>
+                MNDoT: Background | Rethinking I-94 — Minneapolis to St. Paul (<a href="https://www.google.com/search?q=how+many+people+drive+through+i94+daily&oq=how+many+people+drive+through+i94+daily&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTEwODU2ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8#:~:text=Background%20%7C%20Rethinking%20I%2D94%20%E2%80%94%20Minneapolis%20to%20St.%20Paul" class="hyperlink" target="_blank">Source</a>)<br>
+                United States Census Bureau, Minneapolis Poverty Rates by Census Tract<br>
+                United States Census Bureau, Minneapolis Educational Attainment Data by Census Tract<br>
+                The “Minnesota Paradox” (Myers Jr., S)<br>
+                Long Shadow of Racial Discrimination: Evidence from Housing Covenants of Minneapolis (Sood, A) (2019)<br>
+                Race, Risk, and The Emergence of Federal Redlining (Fishback, P) (2020)<br>
+                A 'Forgotten History' Of How The U.S. Government Segregated America (Gross, T) (2017)<br>
+
+            </p>
+
+        </div>
+
+     </section>
+
+  </article>
+
+  <!-- ══════════════════════════════════════════
+       BACK TO PROJECTS
+  ══════════════════════════════════════════ -->
+  <a href="projects.html" class="next-project">
+    <div>
+      <span class="next-project-label">Back</span>
+      <h3 class="next-project-title">Return to<br><em>Projects</em></h3>
+    </div>
+    <div class="next-project-arrow">→</div>
+  </a>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2026 Makeda Y. Tadesse</p>
+    <p>
+      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
+    </p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ── Scroll progress bar ──────────────────────────────────
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      bar.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
