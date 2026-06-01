@@ -1,2 +1,2 @@
-# [MakedaTadesse]([url](https://makedatadesse.github.io/index.html))
+# [MakedaTadesse](https://makedatadesse.github.io/index.html)
 Makeda's Pratt MSDAV'26 Portfolio site
