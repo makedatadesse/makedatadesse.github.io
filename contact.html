@@ -3,207 +3,190 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Other Work — Makeda Y. Tadesse</title>
+  <title>Contact — Makeda Y. Tadesse</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
 
     body { background-image: none; }
 
-    /* ── PAGE HEADER ── */
-    .page-header {
-      padding-top: calc(var(--nav-height) + 4rem);
-      padding-left: var(--page-pad-x);
-      padding-right: var(--page-pad-x);
-      padding-bottom: 3rem;
+    .contact-page {
+      min-height: 100vh;
+      padding: calc(var(--nav-height) + 5rem) var(--page-pad-x) 6rem;
       max-width: var(--max-width);
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: end;
-      gap: 2rem;
-      border-bottom: 1px solid var(--ink-xlight);
     }
 
-    .page-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: block;
-      margin-bottom: 0.8rem;
-    }
-
-    .page-title {
+    /* ── PAGE TITLE ── */
+    .contact-heading {
       font-family: var(--font-serif);
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-size: clamp(2.8rem, 6vw, 5rem);
       line-height: 1.0;
       color: var(--ink);
+      margin-bottom: 3.5rem;
     }
 
-    .page-title em {
+    .contact-heading em {
       font-style: italic;
       color: var(--accent);
     }
 
-    .page-intro {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      line-height: 1.8;
-      color: var(--ink-mid);
-      max-width: 380px;
-      margin-left: auto;
-      padding-bottom: 0.4rem;
-    }
-
-    /* ── MAIN CONTENT ── */
-    .content {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0 var(--page-pad-x) 6rem;
-    }
-
-    /* ── SECTION ── */
-    .work-section {
-      padding-top: 3.5rem;
-      border-bottom: 1px solid var(--ink-xlight);
-      padding-bottom: 0.5rem;
-    }
-
-    .work-section:last-child {
-      border-bottom: none;
-    }
-
-    .work-section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .work-section-title {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--ink);
-    }
-
-    .work-section-count {
-      font-family: var(--font-mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-    }
-
-    /* ── ENTRY ROW ── */
-    .entry {
+    /* ── TWO COLUMN ── */
+    .contact-grid {
       display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: baseline;
-      gap: 2rem;
-      padding: 1rem 0;
-      border-top: 1px solid var(--ink-xlight);
+      grid-template-columns: 1fr 1.4fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    /* ── LEFT COLUMN ── */
+    .contact-left {}
+
+    .contact-blurb {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-style: italic;
+      line-height: 1.85;
+      color: var(--ink-mid);
+      margin-bottom: 2.5rem;
+      max-width: 320px;
+    }
+
+    /* Email row */
+    .contact-link-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 0;
+      border-top: 1.5px solid var(--ink-light);
       text-decoration: none;
       color: inherit;
-      transition: background 0.2s, padding-left 0.2s, border-color 0.2s;
+      transition: padding-left 0.2s, border-color 0.2s;
     }
 
-    .entry:hover {
-      background: var(--ink);
-      padding-left: 0.75rem;
+    .contact-link-row:last-of-type {
+      border-bottom: 1.5px solid var(--ink-light);
+    }
+
+    .contact-link-row:hover {
+      padding-left: 0.5rem;
       border-top-color: var(--accent);
     }
 
-    /* Non-linked entry (no href) */
-    .entry-static {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: baseline;
-      gap: 2rem;
-      padding: 1rem 0;
-      border-top: 1px solid var(--ink-xlight);
-      transition: background 0.2s, padding-left 0.2s;
-      cursor: default;
-    }
-
-    .entry-static:hover {
-      background: var(--ink);
-      padding-left: 0.75rem;
-    }
-
-    .entry-title {
+    .contact-link-icon {
       font-family: var(--font-serif);
-      font-size: 0.9rem;
+      font-size: 1rem;
+      color: var(--ink-light);
+      width: 1.2rem;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+
+    .contact-link-row:hover .contact-link-icon {
+      color: var(--accent);
+    }
+
+    .contact-link-text {
+      font-family: var(--font-bold);
+      font-size: 0.73rem;
+      color: var(--ink-mid);
+      transition: color 0.2s;
+    }
+
+    .contact-link-row:hover .contact-link-text {
       color: var(--ink);
-      line-height: 1.4;
-      transition: color 0.2s;
     }
 
-    .entry:hover .entry-title,
-    .entry-static:hover .entry-title {
-      color: #F4F1EC;
+    /* ── RIGHT COLUMN: FORM ── */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
     }
 
-    .entry-source {
-      font-family: var(--font-mono);
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-family: var(--font-bold);
+      font-weight: bolder;
       font-size: 0.6rem;
-      letter-spacing: 0.06em;
-      color: var(--ink-light);
-      white-space: nowrap;
-      transition: color 0.2s;
-    }
-
-    .entry:hover .entry-source,
-    .entry-static:hover .entry-source {
-      color: rgba(244, 241, 236, 0.4);
-    }
-
-    /* In-progress tag */
-    .entry-tag {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      border: 1px solid var(--ink-xlight);
-      color: var(--ink-light);
-      padding: 0.15rem 0.45rem;
-      margin-left: 0.6rem;
-      vertical-align: middle;
-      transition: color 0.2s, border-color 0.2s;
+      color: var(--ink-mid);
     }
 
-    .entry-tag.active {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .entry:hover .entry-tag,
-    .entry-static:hover .entry-tag {
-      color: rgba(244, 241, 236, 0.4);
-      border-color: rgba(244, 241, 236, 0.15);
-    }
-
-    .entry:hover .entry-tag.active {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    /* Arrow on linked entries */
-    .entry-arrow {
+    .form-input,
+    .form-textarea {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--ink-light);
-      opacity: 0;
-      transition: opacity 0.2s, color 0.2s;
-      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--ink);
+      background: transparent;
+      border: 1.5px solid var(--ink-xlight);
+      padding: 0.7rem 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      resize: none;
+      appearance: none;
+      -webkit-appearance: none;
+      border-radius: 0;
     }
 
-    .entry:hover .entry-arrow {
-      opacity: 1;
-      color: var(--accent);
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--ink-xlight);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--ink-mid);
+    }
+
+    .form-textarea {
+      height: 140px;
+    }
+
+    /* Submit button */
+    .form-submit {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      border: none;
+      padding: 0.85rem 1.6rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: flex-end;
+      border-radius: 0;
+    }
+
+    .form-submit:hover {
+      background: var(--accent);
+    }
+
+    /* Form success message */
+    .form-success {
+      display: none;
+      font-family: var(--font-mono);
+      font-weight: bold;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      color: var(--accent-dark);
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--accent-dark);
+      margin-top: 0.5rem;
     }
 
     /* ── FOOTER ── */
@@ -226,11 +209,11 @@
     .site-footer a { color: var(--ink-mid); transition: color 0.2s; }
     .site-footer a:hover { color: var(--accent); }
 
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .page-header { grid-template-columns: 1fr; gap: 1rem; }
-      .page-intro { margin-left: 0; }
-      .entry, .entry-static { grid-template-columns: 1fr; gap: 0.25rem; }
-      .entry-source { margin-top: 0.1rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-submit { align-self: stretch; text-align: center; }
     }
 
   </style>
@@ -250,143 +233,98 @@
     </ul>
   </nav>
 
-  <!-- Page header -->
-  <header class="page-header">
-    <div>
-      <span class="page-eyebrow">Beyond the Portfolio</span>
-      <h1 class="page-title">Other<br><em>Work</em></h1>
+  <div class="contact-page">
+
+    <h1 class="contact-heading">Get in <em>Touch</em></h1>
+
+    <div class="contact-grid">
+
+      <!-- ── LEFT: text + email ── -->
+      <div class="contact-left">
+
+        <p class="contact-blurb">
+          For inquiries, collaboration, or insights.
+        </p>
+
+        <a href="mailto:Tadesse.Mak@gmail.com" class="contact-link-row">
+          <span class="contact-link-icon">✉</span>
+          <span class="contact-link-text">MPT5913@psu.edu</span>
+        </a>
+
+        <a href="https://www.linkedin.com/in/makedatadesse" target="_blank" class="contact-link-row">
+          <span class="contact-link-icon">in</span>
+          <span class="contact-link-text">linkedin.com/in/makedatadesse</span>
+        </a>
+
+      </div>
+
+      <!-- ── RIGHT: form ── -->
+      <div>
+        <form
+          class="contact-form"
+          id="contact-form"
+          action="https://formspree.io/f/mzdnayze"
+          method="POST"
+        >
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="first-name">First Name</label>
+              <input class="form-input" type="text" id="first-name" name="first_name" placeholder="" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="last-name">Last Name</label>
+              <input class="form-input" type="text" id="last-name" name="last_name" placeholder="" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email *</label>
+            <input class="form-input" type="email" id="email" name="email" required placeholder="" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-textarea" id="message" name="message" placeholder=""></textarea>
+          </div>
+
+          <button class="form-submit" type="submit">Send →</button>
+
+          <div class="form-success" id="form-success">
+            Message sent — I'll be in touch soon. Peace, Makeda
+          </div>
+
+        </form>
+      </div>
+
     </div>
-    <p class="page-intro">
-      Exhibitions, press, talks, and works in progress.
-    </p>
-  </header>
+  </div>
 
-  <main class="content">
-
-        <!-- ── PRESS / WRITTEN ABOUT ── -->
-    <section class="work-section">
-      <div class="work-section-header">
-        <h2 class="work-section-title">Press</h2>
-        <span class="work-section-count">— selected coverage</span>
-      </div>
-
-      <h4>Adera Lije; Adera Lijen</h4>
-      <a href="https://www.mplsart.com/written/2024/08/this-feeling-of-nostalgia-is-both-grief-and-joy-at-the-same-time-curator-makeda-tadesse-in-conversation" class="entry" target="_blank">
-        <span class="entry-title">
-          “This feeling of nostalgia is both grief and joy at the same time:” Curator Makeda Tadesse in conversation
-          <span class="entry-arrow">↗</span>
-        </span>
-        <span class="entry-source">MPLSArt, Scott Melamed · 2024</span>
-      </a>
-
-      <a href="https://northeastminneapolisartsdistrict.org/building-bridges-of-self-acceptance-in-africa-and-minnesota/" class="entry" target="_blank">
-        <span class="entry-title">
-          Building bridges of self acceptance in Africa and Minnesota
-          <span class="entry-arrow">↗</span>
-        </span>
-        <span class="entry-source">Northeast Minneapolis Arts District · 2024</span>
-      </a>
-
-      <a href="https://www.power1047.fm/post/exhibits-spotlight-east-african-diaspora-and-black-trans-lives" class="entry" target="_blank">
-        <span class="entry-title">
-          Dual exhibit spotlights East African diaspora, Black trans lives
-          <span class="entry-arrow">↗</span>
-        </span>
-        <span class="entry-source">Power 104.7, Myah Goff · 2024</span>
-      </a>
-
-    </section>
-
-    <!-- ── CURRENT / IN PROGRESS ── -->
-    <section class="work-section">
-      <div class="work-section-header">
-        <h2 class="work-section-title">Current &amp; In Progress</h2>
-        <span class="work-section-count">— ongoing</span>
-      </div>
-
-      <a href="https://docs.google.com/document/d/13DSitma8pnRTb3cWYtpq0__r5FJxWSQPHpHogKVtWVU/edit?usp=sharing" class="entry" target="_blank">
-        <span class="entry-title">
-          Neighborhood Resurrection
-          <span class="entry-tag active">Ongoing</span>
-        </span>
-        <span class="entry-source">IRB Certified · Pratt Institute</span>
-      </a>
-      
-      <a href="https://static1.squarespace.com/static/5ad6b09c0dbda34498599492/t/66a563db19046d0fe4a468c2/1722115037362/Digital+Program-+Artist+Interviews.pdf?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnto4ClMMibgo3OXlFaTzYyCRf5YAgrqG7XsgPkrSKTJGR9-exyK02eL2P3-Y_aem_iTUTxuCHX1ub0Uu7_CP2lQ" class="entry" target="_blank">
-        <span class="entry-title">
-          Return, Remains — Digital Repository
-          <span class="entry-tag active">Ongoing</span>
-        </span>
-        <span class="entry-source">Digital Humanities · Oral History</span>
-      </a>
-    
-
-    </section>
-
-    <!-- ── EXHIBITIONS CURATED ── -->
-    <section class="work-section">
-      <div class="work-section-header">
-        <h2 class="work-section-title">Curated Exhibitions</h2>
-        <span class="work-section-count">— 2021–Present</span>
-      </div>
-      <a class="entry" target="_blank">
-        <span class="entry-title">
-          Lost and Found: Mapping It Out
-          <span class="entry-arrow"></span>
-        </span>
-        <span class="entry-source">Pratt Rubelle and Norman Schafler Gallery · August 2026</span>
-      </a>
-
-      <a href="https://publicfunctionary.org/news/2024/6/27/adjera-lije-adera-lijen" class="entry" target="_blank">
-        <span class="entry-title">
-          Adera, Lije; Adera Lijen
-          <span class="entry-arrow">↗</span>
-        </span>
-        <span class="entry-source">Public Functionary · Aug 2024</span>
-      </a>
-
-      <a href="https://publicfunctionary.org/news/2024/2/14/blood-memory" class="entry" target="_blank">
-        <span class="entry-title">
-          Blood Memory: Candida Gonzalez
-          <span class="entry-arrow">↗</span>
-        </span>
-        <span class="entry-source">Public Functionary · March 2024</span>
-      </a>
-
-    </section>
-
-    <!-- ── TALKS & PRESENTATIONS ── -->
-    <section class="work-section">
-      <div class="work-section-header">
-        <h2 class="work-section-title">Talks &amp; Presentations</h2>
-        <span class="work-section-count">— selected</span>
-      </div>
-
-      <a href="https://vimeo.com/1007251479?turnstile=0.gsNzR3g7r67E3KNjbu32fV8p720B0ouhGulg139gOWziGhfhEqTd1B3EE7s1zA6ZVOoaPyDSvkv6aeuPTUCdZZbr4wZMsNYDmmIpS4fK8T5kc4iy4ghWQCc6bzhYnyYLQbARItvpYFcfQriJXLxScZ5AbCB-fzb8M8MBfj7Er8fvSok1bjXcInoh11lXFftgaph-UqbHTGnNXszMgW4crRrgrisKiDgWjxsafoKdNhvXMBPw0vxLzLW_gx5ZaVyaHVp4ty1pUTqXktUxi0AUypY2eHbIGfHjqN4Ik0Sj6TS7X3f2Bns5nHueZQofbhwUOqSE9gluEkKhYiICKYb6Py62xObCjKPabJYPQtRqxZpk6hJ4eDyWE6e9y1xbskfmnbatqcwJgY584YnLs_KCnO7wUIL54zLarDzY2vqcvAX4ll9zQBFcJZHqwGWhr7y92Hjx6lUaEzdnLde8CP2AdOADKYLEjoHXYNThTk5NVKirRTOSQc3dugAu0s7OQQnXFXurkfhcIqe9_cGE4RYCo-I0Woxj0sJ_LzlGxDpWZVOVELrfcATBHSfQYoGOaUDPYgujxHs0vQDzdLFcQC8EzA5RYwTSjrZJs78e8h5-9Raz7BWRaVBINUXgp3TTXcOW0NG8EqWf26-HJtfraw3W0vTRorI2WqCr3GCHIDugCi_A3R3gBq6-jtvnKEy_kmfGR7nBgBk3c1Irf9IqTOWtxJRsRda9PY6IclJkdp9jQ4Z_eM6bBj_nchRk94nJWNPKfD7OA4EivjQ0lQaxpHzsExFYpY7Prc6HaQf0u_FC5mkK7IURTw9u57UIG5Gze4JKfn1jQLYxJPS49WAo7mfH5dMSVtUy54CU0qmJ5HfH9_NhHOJuaax2g922jj7dgXkv-ZxkzYNOCgRcbUhhLBSvxWt61mTlkRVlMMoSkT8Lv20.Ly_EeQM9Q7z_ozD9Zewkvg.b59c35fa1926fe58223f814ccd5ad263151f36400ec3c5d4f802153b320d893e" class="entry" target="_blank">
-        <span class="entry-title">
-          Nafyar and Addis Alemu in Conversation with Makeda Tadesse
-          <span class="entry-arrow">↗</span>
-        </span>
-        <span class="entry-source">Public Functionary · 2024</span>
-      </a>
-
-    </section>
-
-  </main>
-
-  <!-- Footer -->
   <footer class="site-footer">
-    <p>© 2026 Makeda Y. Tadesse</p>
-    <p>
-      <a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a>
-      &nbsp;·&nbsp;
-      <a href="https://www.linkedin.com/in/makedatadesse" target="_blank">LinkedIn ↗</a>
-      &nbsp;·&nbsp;
-      <a href="mailto:Tadesse.Mak@gmail.com">MTadesse@Pratt.edu</a>
-    </p>
+    <p>© 2025 Makeda Y. Tadesse</p>
+    <p><a href="mailto:Tadesse.Mak@gmail.com">Tadesse.Mak@gmail.com</a></p>
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    // ── Formspree AJAX submit (optional — removes page redirect) ──
+    const form = document.getElementById('contact-form');
+    const success = document.getElementById('form-success');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        form.reset();
+        success.style.display = 'block';
+      }
+    });
+  </script>
 
 </body>
 </html>
